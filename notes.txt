@@ -1,0 +1,16 @@
+//Notes from 13 March lecture
+
+There is a main app component.
+We're going to have a logo component, a welcome component, a main component.
+In the welcome component, we will have two a login and a register component.
+
+To render everything, we would do:
+ReactDOM.render(
+    <App/>, //first argument is a single component.  Cannot accept more than one.
+    document.querySelector('main') //second argument is vanilla javascript that we put the component into.
+);
+
+git checkout -b annabirrer
+git add .
+git commit -m "First commit"
+git push origin ronan
