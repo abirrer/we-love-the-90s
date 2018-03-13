@@ -10,7 +10,88 @@ ReactDOM.render(
     document.querySelector('main') //second argument is vanilla javascript that we put the component into.
 );
 
+//Tips for Debugging
+    -check your import/export (default) stuff
+    -check that you "return"ed your JSX
+
+//Setting up Git
+git clone [link to github]
 git checkout -b annabirrer
 git add .
 git commit -m "First commit"
-git push origin ronan
+git push origin annabirrer:annabirrer
+
+//Setting up servers
+node bundle-server.js (in a separate tab)
+node index.js
+
+//Props
+values that are passed down to components
+
+//State
+the internal state of a class component.
+
+//Lifecycle
+
+componentDidMount = best place to make API calls
+
+//Making Forms
+    1. put name attribute on inputs
+    2. create onChange event listener
+    3. update the state in the onChange
+
+//Part 1 Notes
+
+----Key things to do----
+-make Welcome component
+-wire up onChange and onSubmit events on our form
+-make Registration component
+-make Logo component
+
+-create DB
+-use spicedPG
+-make a POST route for our registration, utilizing axios. this happens inside the registration Form. Also need INSERT query into db
+-implement logic in start.js that checks URL and renders corresponding page. (simple else if statement)
+-routes in our server for /welcome and /
+-for Registration, we need to use bcrypt to hashPassword and store the hash in the db (server stuff is similar to the petition project)
+-make separate queries.js file
+-styling
+
+In handlesubmit, if there is an error, than render an error.
+it will show up in a .catch
+
+How the app will be structured:
+
+Not logged in -> only allowed to see login and register pages
+if logged in -> can see everything else
+
+//Not logged in pages:
+url is /welcome
+so we need an app.get(/welcome) and send a user to this route if a user is not logged in.
+render the welcome component, inside the welcome component is a registration component.
+the welcome component will render the registration component.
+
+//Logged in pages:
+If they are logged in, send to the "/" route
+should show us the logo component
+
+here's now to do the logo:
+function Logo() {
+    return (
+        <img />
+    )
+}
+
+then embed it like <Logo />
+
+
+two routes:
+
+/welcome --> NOT logged in
+/ -> logged in
+Both of these routes serve the same res.sendFile(index.html), the only difference is the URL
+
+so there is an if statement, that if they try to go to welcome and they are logge din,
+then redirect them to /
+
+inside of start.js, we need to check for URL and serve the different pages.
