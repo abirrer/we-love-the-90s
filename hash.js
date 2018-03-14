@@ -17,10 +17,13 @@ function hashPassword(plainTextPassword) {
     });
 }
 
-function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
+function checkPassword(
+    enteredPasswordFromLoginForm,
+    hashedPasswordFromDatabase
+) {
     return new Promise(function(resolve, reject) {
         bcrypt.compare(
-            textEnteredInLoginForm,
+            enteredPasswordFromLoginForm,
             hashedPasswordFromDatabase,
             function(err, doesMatch) {
                 if (err) {

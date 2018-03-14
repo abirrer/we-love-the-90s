@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axios";
 import { Link } from "react-router-dom";
 
 // ------------------------------------------------------------ //
@@ -29,22 +29,17 @@ export default class Login extends React.Component {
 
         e.preventDefault();
 
-        axios
-            .post("/welcome/login", {
-                email: email,
-                password: password
-            })
-            .then(res => {
-                if (res.data.success) {
-                    console.log("success with login handleSubmit");
-                    location.replace("/");
-                } else {
-                    console.log("error with login handleSubmit");
-                    this.setState({
-                        error: true
-                    });
-                }
-            });
+        axios.post("/welcome/login", { email, password }).then(res => {
+            if (res.data.success) {
+                console.log("success with login handleSubmit");
+                location.replace("/");
+            } else {
+                console.log("error with login handleSubmit");
+                this.setState({
+                    error: true
+                });
+            }
+        });
     }
 
     render() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 
 // ------------------------------------------------------------ //
 
@@ -21,22 +21,27 @@ export default class Registration extends React.Component {
     }
 
     handleChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
+        this.setState(
+            {
+                [e.target.name]: e.target.value
+            },
+            () => {
+                console.log("new state", this.state);
+            }
+        );
     }
 
     handleSubmit(e) {
         const { first, last, email, password } = this.state;
-
+        console.log(first, last, email, password);
         e.preventDefault();
 
         axios
             .post("/welcome/register", {
-                first: first,
-                last: last,
-                email: email,
-                password: password
+                first,
+                last,
+                email,
+                password
             })
             .then(res => {
                 if (res.data.success) {

@@ -20,10 +20,7 @@ function addNewUser(first, last, email, password) {
 
 function getPassword(email) {
     return db.query(
-        `SELECT users.id, users.first, users.last, users.hashed_password, signatures.id AS sig_id FROM users
-        JOIN signatures
-        ON users.id = signatures.user_id
-        WHERE email = $1`,
+        `SELECT users.id, users.first, users.last, users.hashed_password FROM users WHERE email = $1`,
         [email]
     );
 }

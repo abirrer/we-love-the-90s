@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const { hashPassword, checkPassword } = require("./hash");
 const { addNewUser, getPassword } = require("./db");
+const csrf = require("csurf");
 
 //MIDDLEWARE
 
@@ -17,6 +18,13 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14 //this means 14 days of complete inactivity
     })
 );
+
+app.use(csrf());
+
+app.use(function(req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 app.use(cookieParser());
 
@@ -39,22 +47,27 @@ app.use(
     })
 );
 
+app.use(bodyParser.json());
+
 //ROUTES
 
 app.post("/welcome/register", (req, res) => {
-    console.log("inside POST welcome page");
+    console.log("inside POST welcome page", req.body);
     if (
         !req.body.first ||
         !req.body.last ||
         !req.body.email ||
         !req.body.password
     ) {
+        console.log("error in post step 1");
         res.json({
-            success: false
+            error: "Please complete all forms before submitting."
         });
     } else {
+        console.log("made it to post step 2");
         hashPassword(req.body.password)
             .then(hashedPassword => {
+                console.log(hashedPassword);
                 return addNewUser(
                     req.body.first,
                     req.body.last,
@@ -63,6 +76,7 @@ app.post("/welcome/register", (req, res) => {
                 );
             })
             .then(result => {
+                console.log(result.rows[0]);
                 req.session.user = {
                     id: result.rows[0].id,
                     first: result.rows[0].first,
@@ -87,10 +101,11 @@ app.post("/welcome/register", (req, res) => {
 });
 
 app.post("/welcome/login", (req, res) => {
+    console.log("inside POST login page", req.body);
     if (!req.body.email || !req.body.password) {
         res.render("login", {
             error: true
-        }); //need to update that error shows and test.
+        });
     } else {
         getPassword(req.body.email).then(getPasswordResult => {
             checkPassword(
@@ -98,25 +113,32 @@ app.post("/welcome/login", (req, res) => {
                 getPasswordResult.rows[0].hashed_password
             )
                 .then(result => {
+                    console.log(result);
                     if (result == true) {
                         req.session.user = {
                             id: getPasswordResult.rows[0].id,
                             first: getPasswordResult.rows[0].first,
-                            last: getPasswordResult.rows[0].last,
-                            sigID: getPasswordResult.rows[0].sig_id
+                            last: getPasswordResult.rows[0].last
                         };
-                        res.redirect("/thankyou");
                     } else {
-                        res.render("login", {
-                            error: true
+                        res.json({
+                            success: false
                         });
                     }
                 })
+                .then(() => {
+                    res.json({
+                        success: true
+                    });
+                })
                 .catch(error => {
                     console.log(
-                        "There was an error in the login post request: ",
+                        "There was an error in the registration post request: ",
                         error
                     );
+                    res.json({
+                        success: false
+                    });
                 });
         });
     }
