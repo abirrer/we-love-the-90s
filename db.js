@@ -18,15 +18,15 @@ function addNewUser(first, last, email, password) {
     );
 }
 
-// function getPassword(email) {
-//     return db.query(
-//         `SELECT users.id, users.first, users.last, users.hashed_password, signatures.id AS sig_id FROM users
-//         JOIN signatures
-//         ON users.id = signatures.user_id
-//         WHERE email = $1`,
-//         [email]
-//     );
-// }
+function getPassword(email) {
+    return db.query(
+        `SELECT users.id, users.first, users.last, users.hashed_password, signatures.id AS sig_id FROM users
+        JOIN signatures
+        ON users.id = signatures.user_id
+        WHERE email = $1`,
+        [email]
+    );
+}
 
 exports.addNewUser = addNewUser;
-// exports.getPassword = getPassword;
+exports.getPassword = getPassword;

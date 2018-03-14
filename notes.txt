@@ -65,6 +65,12 @@ How the app will be structured:
 Not logged in -> only allowed to see login and register pages
 if logged in -> can see everything else
 
+in start.js:
+//use the location.pathname to look at urlname
+//check for URL, if it is /welcome, load the welcome component
+//into ReactDOM.render....otherwise, render Logo
+//we will use req.session to set the logged in user, etc.
+
 //Not logged in pages:
 url is /welcome
 so we need an app.get(/welcome) and send a user to this route if a user is not logged in.
@@ -95,3 +101,9 @@ so there is an if statement, that if they try to go to welcome and they are logg
 then redirect them to /
 
 inside of start.js, we need to check for URL and serve the different pages.
+
+//Notes on 14 March
+
+in welcome page we will use the hashrouter.
+
+for the main/app page after login, then we use the browser router.

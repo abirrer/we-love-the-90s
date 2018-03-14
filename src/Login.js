@@ -1,16 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 // ------------------------------------------------------------ //
 
-export default class Registration extends React.Component {
+export default class Login extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            first: "",
-            last: "",
             email: "",
             password: "",
             error: ""
@@ -27,23 +25,21 @@ export default class Registration extends React.Component {
     }
 
     handleSubmit(e) {
-        const { first, last, email, password } = this.state;
+        const { email, password } = this.state;
 
         e.preventDefault();
 
         axios
-            .post("/welcome/register", {
-                first: first,
-                last: last,
+            .post("/welcome/login", {
                 email: email,
                 password: password
             })
             .then(res => {
                 if (res.data.success) {
-                    console.log("success with registration handleSubmit");
+                    console.log("success with login handleSubmit");
                     location.replace("/");
                 } else {
-                    console.log("error with registration handleSubmit");
+                    console.log("error with login handleSubmit");
                     this.setState({
                         error: true
                     });
@@ -57,18 +53,6 @@ export default class Registration extends React.Component {
                 <form>
                     <input
                         onChange={this.handleChange}
-                        name="first"
-                        type="text"
-                        placeholder="First Name"
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        name="last"
-                        type="text"
-                        placeholder="Last Name"
-                    />
-                    <input
-                        onChange={this.handleChange}
                         name="email"
                         type="email"
                         placeholder="Email Address"
@@ -79,10 +63,10 @@ export default class Registration extends React.Component {
                         type="password"
                         placeholder="Password"
                     />
-                    <button onClick={this.handleSubmit}>Register</button>
+                    <button onClick={this.handleSubmit}>Login</button>
                 </form>
                 <p>
-                    Already a member? <Link to="/login">Log In</Link>.
+                    Not registered? <Link to="/">Sign Up</Link>.
                 </p>
             </div>
         );

@@ -1,15 +1,15 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const compression = require('compression');
+const compression = require("compression");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const { hashPassword, checkPassword } = require("./hash");
-const { addNewUser } = require("./db");
+const { addNewUser, getPassword } = require("./db");
 
 //MIDDLEWARE
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 app.use(
     cookieSession({
@@ -22,15 +22,15 @@ app.use(cookieParser());
 
 app.use(compression());
 
-if (process.env.NODE_ENV != 'production') {
+if (process.env.NODE_ENV != "production") {
     app.use(
-        '/bundle.js',
-        require('http-proxy-middleware')({
-            target: 'http://localhost:8081/'
+        "/bundle.js",
+        require("http-proxy-middleware")({
+            target: "http://localhost:8081/"
         })
     );
 } else {
-    app.use('/bundle.js', (req, res) => res.sendFile(`${__dirname}/bundle.js`));
+    app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
 app.use(
@@ -86,36 +86,50 @@ app.post("/welcome/register", (req, res) => {
     }
 });
 
-app.get("welcome", (req, res) => {
-    if (req.session.user) {
-        res.redirect("/");
+app.post("/welcome/login", (req, res) => {
+    if (!req.body.email || !req.body.password) {
+        res.render("login", {
+            error: true
+        }); //need to update that error shows and test.
     } else {
-        res.sendFile(__dirname + '/index.html');
+        getPassword(req.body.email).then(getPasswordResult => {
+            checkPassword(
+                req.body.password,
+                getPasswordResult.rows[0].hashed_password
+            )
+                .then(result => {
+                    if (result == true) {
+                        req.session.user = {
+                            id: getPasswordResult.rows[0].id,
+                            first: getPasswordResult.rows[0].first,
+                            last: getPasswordResult.rows[0].last,
+                            sigID: getPasswordResult.rows[0].sig_id
+                        };
+                        res.redirect("/thankyou");
+                    } else {
+                        res.render("login", {
+                            error: true
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log(
+                        "There was an error in the login post request: ",
+                        error
+                    );
+                });
+        });
     }
 });
 
-app.get('*', function(req, res) {
-
-    if (!req.session.user) {
+app.get("*", function(req, res) {
+    if (!req.session.user && req.url != "/welcome") {
         res.redirect("/welcome");
+    } else if (req.session.user && req.url == "/welcome") {
+        res.redirect("/");
     } else {
-        res.sendFile(__dirname + '/index.html');
+        res.sendFile(__dirname + "/index.html");
     }
-
-    // if (!req.session.user) {
-    //     if (req.url != "/welcome") {
-    //         res.redirect("/welcome");
-    //     } else {
-    //         next();
-    //     }
-    // } else {
-    //     if (req.url == "/welcome") {
-    //         res.redirect("/");
-    //     } else {
-    //         next();
-    //     }
-    // }
-
 });
 
 app.listen(8080, function() {
