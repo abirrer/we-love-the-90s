@@ -6,7 +6,7 @@ if (!process.env.DATABASE_URL) {
 
 var db = spicedPg(
     process.env.DATABASE_URL ||
-        `postgres:${dbUser}:${dbPass}@localhost:5432/signatures`
+        `postgres:${dbUser}:${dbPass}@localhost:5432/socialnetwork`
 );
 
 //QUERIES
