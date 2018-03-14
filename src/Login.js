@@ -36,7 +36,7 @@ export default class Login extends React.Component {
             } else {
                 console.log("error with login handleSubmit");
                 this.setState({
-                    error: true
+                    error: res.data.error
                 });
             }
         });
@@ -45,6 +45,7 @@ export default class Login extends React.Component {
     render() {
         return (
             <div className="welcome-outer-box">
+                <p className="error-message">{this.state.error}</p>
                 <form className="welcome-inner-box">
                     <input
                         onChange={this.handleChange}

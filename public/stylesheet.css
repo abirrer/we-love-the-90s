@@ -29,7 +29,7 @@
 
 h1 {
     font-size: 50px;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
 }
 
 input {
@@ -57,4 +57,9 @@ button {
 button:hover {
     box-shadow: 0 4px 20px 0 #f6f8f9;
     cursor: pointer;
+}
+
+.error-message {
+    color: red;
+    font-style: italic;
 }

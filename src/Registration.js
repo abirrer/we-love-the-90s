@@ -24,10 +24,10 @@ export default class Registration extends React.Component {
         this.setState(
             {
                 [e.target.name]: e.target.value
-            },
-            () => {
-                console.log("new state", this.state);
             }
+            // () => {
+            //     console.log("new state", this.state);
+            // }
         );
     }
 
@@ -50,7 +50,7 @@ export default class Registration extends React.Component {
                 } else {
                     console.log("error with registration handleSubmit");
                     this.setState({
-                        error: true
+                        error: res.data.error
                     });
                 }
             });
@@ -59,6 +59,7 @@ export default class Registration extends React.Component {
     render() {
         return (
             <div className="welcome-outer-box">
+                <p className="error-message">{this.state.error}</p>
                 <form className="welcome-inner-box">
                     <input
                         onChange={this.handleChange}

@@ -61,7 +61,8 @@ app.post("/welcome/register", (req, res) => {
     ) {
         console.log("error in post step 1");
         res.json({
-            error: "Please complete all forms before submitting."
+            success: false,
+            error: "Please complete all fields before submitting."
         });
     } else {
         console.log("made it to post step 2");
@@ -89,12 +90,9 @@ app.post("/welcome/register", (req, res) => {
                 });
             })
             .catch(error => {
-                console.log(
-                    "There was an error in the registration post request: ",
-                    error
-                );
                 res.json({
-                    success: false
+                    success: false,
+                    error: "Please complete all fields before submitting."
                 });
             });
     }
@@ -103,8 +101,9 @@ app.post("/welcome/register", (req, res) => {
 app.post("/welcome/login", (req, res) => {
     console.log("inside POST login page", req.body);
     if (!req.body.email || !req.body.password) {
-        res.render("login", {
-            error: true
+        res.json({
+            success: false,
+            error: "Please complete all fields before submitting."
         });
     } else {
         getPassword(req.body.email).then(getPasswordResult => {
@@ -122,22 +121,21 @@ app.post("/welcome/login", (req, res) => {
                         };
                     } else {
                         res.json({
-                            success: false
+                            success: false,
+                            error:
+                                "Please complete all fields before submitting."
                         });
                     }
                 })
-                .then(() => {
-                    res.json({
-                        success: true
-                    });
-                })
+                // .then(() => {
+                //     res.json({
+                //         success: true
+                //     });
+                // })
                 .catch(error => {
-                    console.log(
-                        "There was an error in the registration post request: ",
-                        error
-                    );
                     res.json({
-                        success: false
+                        success: false,
+                        error: "Please complete all fields before submitting."
                     });
                 });
         });
