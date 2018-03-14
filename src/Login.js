@@ -44,8 +44,8 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div>
-                <form>
+            <div className="welcome-outer-box">
+                <form className="welcome-inner-box">
                     <input
                         onChange={this.handleChange}
                         name="email"

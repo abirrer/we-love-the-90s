@@ -9,7 +9,6 @@ export default function Welcome() {
     return (
         <div id="welcome">
             <h1>Welcome!</h1>
-            <img src="/images/exlogo.png" />
             <HashRouter>
                 <div>
                     <Route exact path="/" component={Registration} />

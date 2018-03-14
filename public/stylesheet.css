@@ -1,5 +1,60 @@
-/* .singer {
-    border: 1px solid blue;
+#welcome {
+    background: url("/images/welcomebackground.jpg") no-repeat center center
+        fixed;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Quicksand", sans-serif;
+    /* font-family: "Questrial", sans-serif; */
+    /* font-family: "Didact Gothic", sans-serif; */
+}
+
+.welcome-inner-box {
+    width: 220px;
+    height: auto;
+}
+
+.welcome-outer-box {
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+input {
+    font-family: "Quicksand", sans-serif;
+    border: solid #f6f8f9 1px;
+    border-radius: 5px;
+    margin: 5px;
+    font-size: 18px;
+    padding: 5px;
+}
+
+button {
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+    font-size: 18px;
     margin: 5px;
     padding: 5px;
-} */
+    border: solid #f6f8f9 1px;
+    border-radius: 5px;
+    width: 130px;
+    background-color: #a7c7e2;
+    color: black;
+}
+
+button:hover {
+    box-shadow: 0 4px 20px 0 #f6f8f9;
+    cursor: pointer;
+}
