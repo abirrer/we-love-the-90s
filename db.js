@@ -25,5 +25,21 @@ function getPassword(email) {
     );
 }
 
+function addProfilePic(id, profilePicUrl) {
+    return db.query(
+        `UPDATE users
+        SET profile_pic_id = $2
+        WHERE id = $1
+        RETURNING *`,
+        [id, profilePicUrl]
+    );
+}
+
+function getUserProfile(id) {
+    return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
+}
+
 exports.addNewUser = addNewUser;
 exports.getPassword = getPassword;
+exports.addProfilePic = addProfilePic;
+exports.getUserProfile = getUserProfile;

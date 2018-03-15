@@ -19,12 +19,15 @@
 .welcome-inner-box {
     width: 220px;
     height: auto;
+    text-align: center;
+    /* border: solid; */
 }
 
 .welcome-outer-box {
-    display: grid;
-    justify-content: center;
+    /* display: flex;
+    justify-content: center; */
     text-align: center;
+    /* border: solid; */
 }
 
 h1 {

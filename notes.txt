@@ -107,3 +107,58 @@ inside of start.js, we need to check for URL and serve the different pages.
 in welcome page we will use the hashrouter.
 
 for the main/app page after login, then we use the browser router.
+
+//NOTES FOR PART 3
+Create a class component called App,
+have a component did mount and make an axios get request to get user information.
+Get id, first, last, profile pic, email
+
+need a route for our server, similar to vue project.
+The app instance should pass the information to setState.
+Inside app we will have logo and profile pic and profile pic upload components.
+pass the data with props to our profile pic component.
+
+multer, aws s3, uid all set up.
+
+set default profile picture in the this.state of the constructor
+
+profile pic upload should display as a modal.
+
+we will use formData to grab image from react app and save in a formdata api which can be sent to our express server.
+very similar to what was done in view.
+
+how to add things to form data: formdata.append
+
+TO DOs:
+1. Get the imge from the file input
+2. Append all the data to the FormData constructor
+3. axios post request, sending the formData.
+4. Make a route to handle the upload.
+5. Configure multer on our server.
+6. Pass multer as middleware to the upload route.
+7. Do the S3 dance (setting it up on AWS and in server, then successfully upload an image to our s3 bucket) which you will need to create.
+8. Upon successful upload, save filename in DB along with any other information.
+9. Then res.json the filename (maybe id, anything else. Optionally including the S3 base route URL).
+10. setState with the new profilePicUrl.
+
+when we upload picture, have a handleChange method
+
+handleSubmit(e) {
+    e.preventDefault()
+    let formData = new FormData();
+    form.Data.append('profilepic', this.state.profilepic);
+
+//Add axios post request, but redux alternative is:
+//    this.props.dispatch(uploadImage(formData))
+}
+
+handleChange(e) {
+    this.setState({
+        [e.target.name]: e.target.files[0]
+    }, () => {
+        console.log('new state', this.state);
+    })
+}
+
+
+WE will need to pass prop of this.toggleUploadForm

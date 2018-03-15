@@ -5,8 +5,35 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const { hashPassword, checkPassword } = require("./hash");
-const { addNewUser, getPassword } = require("./db");
+const {
+    addNewUser,
+    getPassword,
+    addProfilePic,
+    getUserProfile
+} = require("./db");
 const csrf = require("csurf");
+const s3 = require("./s3");
+const config = require("./config");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+const diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
 
 //MIDDLEWARE
 
@@ -59,7 +86,7 @@ app.post("/welcome/register", (req, res) => {
         !req.body.email ||
         !req.body.password
     ) {
-        console.log("error in post step 1");
+        console.log("error in post step 1/submission fields");
         res.json({
             success: false,
             error: "Please complete all fields before submitting."
@@ -77,7 +104,10 @@ app.post("/welcome/register", (req, res) => {
                 );
             })
             .then(result => {
-                console.log(result.rows[0]);
+                console.log(
+                    "Results were uploaded & returned: ",
+                    result.rows[0]
+                );
                 req.session.user = {
                     id: result.rows[0].id,
                     first: result.rows[0].first,
@@ -85,14 +115,18 @@ app.post("/welcome/register", (req, res) => {
                 };
             })
             .then(() => {
+                console.log("registration was complete");
                 res.json({
                     success: true
                 });
             })
             .catch(error => {
+                console.log(
+                    "there was an error somewhere in register POST request: ",
+                    error
+                );
                 res.json({
-                    success: false,
-                    error: "Please complete all fields before submitting."
+                    success: false
                 });
             });
     }
@@ -127,11 +161,11 @@ app.post("/welcome/login", (req, res) => {
                         });
                     }
                 })
-                // .then(() => {
-                //     res.json({
-                //         success: true
-                //     });
-                // })
+                .then(() => {
+                    res.json({
+                        success: true
+                    });
+                })
                 .catch(error => {
                     res.json({
                         success: false,
@@ -142,7 +176,31 @@ app.post("/welcome/login", (req, res) => {
     }
 });
 
-app.get("*", function(req, res) {
+app.get("/profile", (req, res) => {
+    getUserProfile(req.session.user.id)
+        .then(result => {
+            console.log(result);
+            // result.rows[0].profile_pic_url = config.s3Url + result.rows[0].image; //this is replaced by the concat within the res.json.
+            result.rows[0].profile_pic_url =
+                result.rows[0].profile_pic_url &&
+                config.s3Url + result.rows[0].profile_pic_url;
+
+            console.log("Profile pic: ", result.rows[0].profile_pic_url);
+
+            res.json({
+                id: result.rows[0].id,
+                first: result.rows[0].first,
+                last: result.rows[0].last,
+                email: result.rows[0].email,
+                profilepic: result.rows[0].profile_pic_url
+            });
+        })
+        .catch(error => {
+            console.log("error in /profile GET request: ", error);
+        });
+});
+
+app.get("*", (req, res) => {
     if (!req.session.user && req.url != "/welcome") {
         res.redirect("/welcome");
     } else if (req.session.user && req.url == "/welcome") {
