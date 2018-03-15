@@ -19,6 +19,7 @@ export default class App extends React.Component {
         };
 
         this.toggleUploadModal = this.toggleUploadModal.bind(this);
+        this.setImage = this.setImage.bind(this);
     }
 
     componentDidMount() {
@@ -43,6 +44,13 @@ export default class App extends React.Component {
         this.setState({ showUploadModal: !this.state.showUploadModal });
     }
 
+    setImage(url) {
+        this.toggleUploadModal();
+        this.setState({
+            profilepic: url
+        });
+    }
+
     render() {
         const { first, last, email, profilepic } = this.state;
 
@@ -58,7 +66,12 @@ export default class App extends React.Component {
                     email={email}
                     profilepic={profilepic}
                 />
-                {this.state.showUploadModal && <ProfilePicUpload />}
+                {this.state.showUploadModal && (
+                    <ProfilePicUpload
+                        toggleUploadModal={this.toggleUploadModal}
+                        setImage={this.setImage}
+                    />
+                )}
             </div>
         );
     }

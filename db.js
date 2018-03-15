@@ -25,10 +25,10 @@ function getPassword(email) {
     );
 }
 
-function addProfilePic(id, profilePicUrl) {
+function updateProfilePic(id, profilePicUrl) {
     return db.query(
         `UPDATE users
-        SET profile_pic_id = $2
+        SET profile_pic_url = $2
         WHERE id = $1
         RETURNING *`,
         [id, profilePicUrl]
@@ -41,5 +41,5 @@ function getUserProfile(id) {
 
 exports.addNewUser = addNewUser;
 exports.getPassword = getPassword;
-exports.addProfilePic = addProfilePic;
+exports.updateProfilePic = updateProfilePic;
 exports.getUserProfile = getUserProfile;

@@ -8,7 +8,7 @@ const { hashPassword, checkPassword } = require("./hash");
 const {
     addNewUser,
     getPassword,
-    addProfilePic,
+    updateProfilePic,
     getUserProfile
 } = require("./db");
 const csrf = require("csurf");
@@ -125,9 +125,6 @@ app.post("/welcome/register", (req, res) => {
                     "there was an error somewhere in register POST request: ",
                     error
                 );
-                res.json({
-                    success: false
-                });
             });
     }
 });
@@ -167,10 +164,7 @@ app.post("/welcome/login", (req, res) => {
                     });
                 })
                 .catch(error => {
-                    res.json({
-                        success: false,
-                        error: "Please complete all fields before submitting."
-                    });
+                    console.log("error in /profile GET request: ", error);
                 });
         });
     }
@@ -198,6 +192,33 @@ app.get("/profile", (req, res) => {
         .catch(error => {
             console.log("error in /profile GET request: ", error);
         });
+});
+
+app.post("/upload", uploader.single("profilepic"), s3.upload, (req, res) => {
+    if (!req.file) {
+        console.log("error because upload fields not complete");
+        res.json({
+            success: false,
+            error: "Please complete all fields before submitting."
+        });
+    } else {
+        console.log(
+            "got into upload POST request",
+            req.session.user.id,
+            req.body.profilepic
+        );
+        updateProfilePic(req.session.user.id, req.file.filename)
+            .then(result => {
+                console.log("upload success");
+                res.json({
+                    success: true,
+                    profilepic: config.s3Url + result.rows[0].profile_pic_url
+                }); //should also have a new url in it, it should call a function that sets its state and close the modal
+            })
+            .catch(error => {
+                console.log("error in profilepic upload POST request: ", error);
+            });
+    }
 });
 
 app.get("*", (req, res) => {
