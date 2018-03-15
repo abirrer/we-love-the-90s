@@ -55,9 +55,10 @@ export default class App extends React.Component {
         const { first, last, email, profilepic } = this.state;
 
         return (
-            <div>
+            <div id="app__outer-box">
+                <div id="app__cover-background" />
                 <h1>
-                    Welcome, {first} {last}!
+                    {first} {last}!
                 </h1>
                 <ProfilePic
                     toggleUploadModal={this.toggleUploadModal}
