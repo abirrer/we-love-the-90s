@@ -35,7 +35,7 @@ export default class ProfilePicUpload extends Component {
 
         console.log("formData looks like: ", formData);
 
-        var app = this;
+        // var app = this;
         axios.post("/upload", formData).then(res => {
             if (res.data.success) {
                 console.log("success with profilepic handleSubmit");
@@ -54,7 +54,9 @@ export default class ProfilePicUpload extends Component {
         return (
             <div>
                 <h2>Upload A New Profile Picture</h2>
-                <p className="error-message">{this.state.error}</p>
+                {this.state.error && (
+                    <p className="error-message">{this.state.error}</p>
+                )}
                 <form className="profilepic-upload__modal">
                     <input
                         onChange={this.handleChange}

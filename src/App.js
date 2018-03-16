@@ -1,7 +1,9 @@
 import React from "react";
+import axios from "./axios";
+import { BrowserRouter, Route, Link } from "react-router-dom";
+import Profile from "./Profile.js";
 import ProfilePic from "./ProfilePic.js";
 import ProfilePicUpload from "./ProfilePicUpload.js";
-import axios from "./axios";
 
 // ------------------------------------------------------------ //
 
@@ -10,32 +12,33 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            id: "",
             first: "",
             last: "",
             email: "",
             profilepic: "/images/defaultprofile.png",
+            bio: "",
             showUploadModal: false
         };
 
         this.toggleUploadModal = this.toggleUploadModal.bind(this);
         this.setImage = this.setImage.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
 
     componentDidMount() {
         axios.get("/profile").then(res => {
-            const { id, first, last, email, profilepic } = res.data;
+            const { first, last, email, profilepic, bio } = res.data;
             this.setState(
                 {
-                    id,
                     first,
                     last,
                     email,
-                    profilepic: profilepic || this.state.profilepic
-                },
-                () => {
-                    console.log("new state: ", this.state);
+                    profilepic: profilepic || this.state.profilepic,
+                    bio
                 }
+                // () => {
+                //     console.log("new state: ", this.state);
+                // }
             );
         });
     }
@@ -51,28 +54,52 @@ export default class App extends React.Component {
         });
     }
 
+    setBio(bio) {
+        this.setState({ bio: bio });
+    }
+
     render() {
-        const { first, last, email, profilepic } = this.state;
+        const { first, last, email, profilepic, bio } = this.state;
 
         return (
-            <div id="app__outer-box">
-                <div id="app__cover-background" />
-                <h1>
-                    {first} {last}!
-                </h1>
-                <ProfilePic
-                    toggleUploadModal={this.toggleUploadModal}
-                    first={first}
-                    last={last}
-                    email={email}
-                    profilepic={profilepic}
-                />
-                {this.state.showUploadModal && (
-                    <ProfilePicUpload
-                        toggleUploadModal={this.toggleUploadModal}
-                        setImage={this.setImage}
-                    />
-                )}
+            <div>
+                <BrowserRouter>
+                    <div>
+                        <h1>We &#9829; The Nineties</h1>
+                        <Link to="/">Profile</Link>
+                        <br />
+                        <ProfilePic
+                            profilepic={profilepic}
+                            toggleUploadModal={this.toggleUploadModal}
+                            setImage={this.setImage}
+                            first={this.props.first}
+                            last={this.props.last}
+                        />
+                        {this.state.showUploadModal && (
+                            <ProfilePicUpload setImage={this.setImage} />
+                        )}
+                        <div>
+                            <Route
+                                exact
+                                path="/"
+                                render={() => (
+                                    <Profile
+                                        first={first}
+                                        last={last}
+                                        email={email}
+                                        profilepic={profilepic}
+                                        bio={bio}
+                                        setBio={this.setBio}
+                                        setImage={this.setImage}
+                                        toggleUploadModal={
+                                            this.toggleUploadModal
+                                        }
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+                </BrowserRouter>
             </div>
         );
     }

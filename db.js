@@ -39,7 +39,18 @@ function getUserProfile(id) {
     return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
 }
 
+function updateBio(id, bio) {
+    return db.query(
+        `UPDATE users
+        SET bio = $2
+        WHERE id = $1
+        RETURNING *`,
+        [id, bio]
+    );
+}
+
 exports.addNewUser = addNewUser;
 exports.getPassword = getPassword;
 exports.updateProfilePic = updateProfilePic;
 exports.getUserProfile = getUserProfile;
+exports.updateBio = updateBio;

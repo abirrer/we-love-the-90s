@@ -9,7 +9,8 @@ const {
     addNewUser,
     getPassword,
     updateProfilePic,
-    getUserProfile
+    getUserProfile,
+    updateBio
 } = require("./db");
 const csrf = require("csurf");
 const s3 = require("./s3");
@@ -186,7 +187,8 @@ app.get("/profile", (req, res) => {
                 first: result.rows[0].first,
                 last: result.rows[0].last,
                 email: result.rows[0].email,
-                profilepic: result.rows[0].profile_pic_url
+                profilepic: result.rows[0].profile_pic_url,
+                bio: result.rows[0].bio
             });
         })
         .catch(error => {
@@ -219,6 +221,20 @@ app.post("/upload", uploader.single("profilepic"), s3.upload, (req, res) => {
                 console.log("error in profilepic upload POST request: ", error);
             });
     }
+});
+
+app.post("/updateBio", (req, res) => {
+    console.log("inside /updateBio POST request");
+    updateBio(req.session.user.id, req.body.bio)
+        .then(result => {
+            res.json({
+                success: true,
+                bio: result.rows[0].bio
+            });
+        })
+        .catch(error => {
+            console.log("error in updateBio POST request: ", error);
+        });
 });
 
 app.get("*", (req, res) => {

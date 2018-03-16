@@ -162,3 +162,57 @@ handleChange(e) {
 
 
 WE will need to pass prop of this.toggleUploadForm
+
+//NOTES FOR PART 4
+
+1. Implement BrowserRouter and Route(s)
+2. Make Profile component
+3. Add bio column to our users table, don't forget to drop the tables.
+4. Edit your routes that are getting userdata to also include the bio.
+5. Add/implement edit bio part
+
+FOR EDIT BIO:
+have a button to toggle your bio text area input thing.
+this comes thru the whole toggling thing we learned yesterday
+It will have a button to save
+After you type it in, it should be there and another edit button will appear.
+There should be a setBio toggle and a bio in the state.
+
+For the submit bio button:
+- BrowserRouter is inside of the App (which allows App to render it).
+- Inside of BrowserRouter is Profile
+- When App mounts, it makes an axios.get request to the server, and the server will res.json the data back.
+- In the client side, we setState with the data.
+- Passes the component to browser via render which allows it to be passed to Profile component.
+- To access props in classes, must use this.props.whatever. In functions, you only use props.whatever
+- In app.post("/newBio") we access the bio via req.body.bio and update the bio just for req.session.user.id
+- Then we dbquery (UPDATE)
+- then req.json({success: true, newBio})
+- in axios.post request do a .then((res) => { this.setState({setBio: res.data.newBio})})
+
+//Example code for App.js:
+<BrowserRouter>
+    <div>
+        <Link to="/">Profile</Link>
+        <br />
+        <Link to="/user/2">Other Profile</Link>
+        <div>
+            <Route
+                exact
+                path="/"
+                render={() => (
+                    <Profile
+                        first={first}
+                        last={last}
+                        profilepic={profilepic}
+                        email={email}
+                        bio={bio}
+                        setBio={this.setBio}
+                        toggleUploader={this.toggleUploader}
+                    />;
+                )}
+            />
+            <Route exact path="/user/:userId" component={OtherProfile} />
+        </div>
+    </div>
+</BrowserRouter>;
