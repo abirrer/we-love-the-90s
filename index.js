@@ -11,7 +11,10 @@ const {
     updateProfilePic,
     getUserProfile,
     updateBio,
-    getOtherUserProfile
+    getOtherUserProfile,
+    getFriendshipStatus,
+    addFriendRequest,
+    withdrawFriendRequest
 } = require("./db");
 const csrf = require("csurf");
 const s3 = require("./s3");
@@ -150,7 +153,9 @@ app.post("/welcome/login", (req, res) => {
                             last: getPasswordResult.rows[0].last
                         };
                     } else {
-                        console.log("login fields were not valid and login failed");
+                        console.log(
+                            "login fields were not valid and login failed"
+                        );
 
                         res.json({
                             success: false,
@@ -160,7 +165,9 @@ app.post("/welcome/login", (req, res) => {
                     }
                 })
                 .then(() => {
-                    console.log("user login verification was successful and req.sessions were set!");
+                    console.log(
+                        "user login verification was successful and req.sessions were set!"
+                    );
 
                     res.json({
                         success: true
@@ -183,7 +190,7 @@ app.get("/profile", (req, res) => {
                 config.s3Url + result.rows[0].profile_pic_url;
 
             res.json({
-                success: true
+                success: true,
                 id: result.rows[0].id,
                 first: result.rows[0].first,
                 last: result.rows[0].last,
@@ -199,7 +206,6 @@ app.get("/profile", (req, res) => {
 
 app.post("/upload", uploader.single("profilepic"), s3.upload, (req, res) => {
     if (!req.file) {
-
         console.log("error because photo upload field not complete");
 
         res.json({
@@ -251,12 +257,12 @@ app.get("/otherUser/:id", (req, res) => {
 
                 res.json({
                     success: true,
-                    id: result.rows[0].id,
-                    first: result.rows[0].first,
-                    last: result.rows[0].last,
-                    email: result.rows[0].email,
-                    profilepic: result.rows[0].profile_pic_url,
-                    bio: result.rows[0].bio
+                    otherId: result.rows[0].id,
+                    otherFirst: result.rows[0].first,
+                    otherLast: result.rows[0].last,
+                    otherEmail: result.rows[0].email,
+                    otherProfilepic: result.rows[0].profile_pic_url,
+                    otherBio: result.rows[0].bio
                 });
             })
             .catch(error => {
@@ -264,6 +270,49 @@ app.get("/otherUser/:id", (req, res) => {
             });
     }
 });
+
+app.get("/loadFriendButton/:otherId", (req, res) => {
+    getFriendshipStatus(req.session.user.id, req.params.otherId)
+        .then(result => {
+            console.log("here are the results: ", result);
+
+            if (!result.rows.length) {
+                //need to do another query to insert a row for new users and set status to 0
+                res.json({
+                    friendshipStatus: 0
+                });
+            } else {
+                res.json({
+                    senderId: result.rows[0].sender_id,
+                    receiverId: result.rows[0].recipient_id,
+                    friendshipStatus: result.rows[0].status
+                });
+            }
+        })
+        .catch(error => {
+            console.log("error in /loadFriendButton GET request: ", error);
+        });
+});
+
+app.post("/sendfriendrequest", (req, res) => {
+    addFriendRequest(
+        req.session.user.id,
+        req.params.receiverId,
+        req.params.friendshipStatus
+    );
+});
+
+// app.post("/updatefriendrequest", (req, res) => {});
+
+app.post("/withdrawfriendrequest", (req, res) => {
+    withdrawFriendRequest(
+        req.session.user.id,
+        req.params.receiverId,
+        req.params.friendshipStatus
+    );
+});
+
+// app.post("/unfriend", (req, res) => {});
 
 app.get("*", (req, res) => {
     if (!req.session.user && req.url != "/welcome") {

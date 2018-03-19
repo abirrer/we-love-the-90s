@@ -53,9 +53,43 @@ function getOtherUserProfile(id) {
     return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
 }
 
+function getFriendshipStatus(userId, otherUserId) {
+    return db.query(
+        `SELECT status, sender_id, recipient_id FROM friendships
+        WHERE (recipient_id = $1 OR sender_id = $1)
+        AND (recipient_id = $2 OR sender_id = $2)`,
+        [userId, otherUserId]
+    );
+}
+
+function addFriendRequest(userId, otherUserId, friendshipStatus) {
+    return db.query(
+        `UPDATE friendships
+        SET status = $3
+        WHERE (recipient_id = $1 OR sender_id = $1)
+        AND (recipient_id = $2 OR sender_id = $2)
+        RETURNING *`,
+        [userId, otherUserId, friendshipStatus]
+    );
+}
+
+function withdrawFriendRequest(userId, otherUserId, friendshipStatus) {
+    return db.query(
+        `UPDATE friendships
+        SET status = $3
+        WHERE (recipient_id = $1 OR sender_id = $1)
+        AND (recipient_id = $2 OR sender_id = $2)
+        RETURNING *`,
+        [userId, otherUserId, friendshipStatus]
+    );
+}
+
 exports.addNewUser = addNewUser;
 exports.getPassword = getPassword;
 exports.updateProfilePic = updateProfilePic;
 exports.getUserProfile = getUserProfile;
 exports.updateBio = updateBio;
 exports.getOtherUserProfile = getOtherUserProfile;
+exports.getFriendshipStatus = getFriendshipStatus;
+exports.addFriendRequest = addFriendRequest;
+exports.withdrawFriendRequest = withdrawFriendRequest;

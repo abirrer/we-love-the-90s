@@ -233,3 +233,69 @@ To Dos:
 If user wants to attempt their own profile, check in the server app.get request
 if req.session.user.id is the same as req.params.id then in the axios request,
 redirect them to the ('/') profile page.  this.props.history.push('/')
+
+
+//PART 6 Notes
+
+6 States of a Friend Request:
+    0. NO_REQUEST
+    1. PENDING
+    2. ACCEPTED
+    3. REJECTED (receiver rejected request)
+    4. TERMINATED (were friends and someone ended it)
+    5. CANCELLED (sender cancelled request)
+
+Tips:
+- use incognito tab to log in as another user and test that the friend requests work between the two.
+  incognito tab just doesn't store cookies after you leave it.
+
+
+in db file for checking recipient/sender:
+
+getFriendshipStatus = function(userId, otherUserId)
+`SELECT status, sender_id AS sender, recipient_id AS recipient
+FROM friendships
+WHERE (recipient_id = $1 OR sender_id = $1)
+AND (recipient_id = $2 OR sender_id = $2)`
+[userId, otherUserId]
+
+button only shows up in the other profile, not our own.
+
+switch (friendshipStatus) {
+    case 0:
+        dispatch(sendFriendRequest(otherUserId, friendshipStatus))
+        break;
+    case 1:
+        dispatch(sendFriendRequest(otherUserId, friendshipStatus))
+        break;
+    case 2:
+        dispatch(sendFriendRequest(otherUserId, friendshipStatus))
+        break;
+}
+
+switch (this.props.friendshipStatus) {
+    case 0: //no friendship
+        text = "Make Friend Request"
+        break;
+    case 1: //pending request
+        text = "Accept Friend Request" // and need to have another button for "Cancel Friend Request"
+        break;
+    case 2: //accepted request
+        text = "End Friendship"
+        break;
+    case 3: //rejected request
+        text = "Make Friend Request"
+        break;
+    case 4:  //unfriended/terminated
+        text = "Make Friend Request"
+        break;
+    case 5:  //withdrawn request
+        text = "Make Friend Request"
+        break;
+    default:
+        text = "Make Friend Request"
+}
+
+return (
+    <button onClick={this.handleClick}> {text} </button>
+)

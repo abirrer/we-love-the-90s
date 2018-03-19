@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import axios from "./axios";
+import FriendButton from "./FriendButton.js";
 
 export default class OtherProfile extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            id: "",
-            first: "",
-            last: "",
-            email: "",
-            bio: "",
-            profilepic: "/images/defaultprofile.png"
+            otherId: "",
+            otherFirst: "",
+            otherLast: "",
+            otherEmail: "",
+            otherBio: "",
+            otherProfilepic: "/images/defaultprofile.png"
         };
     }
 
@@ -21,12 +22,14 @@ export default class OtherProfile extends Component {
                 return this.props.history.push("/");
             } else {
                 this.setState({
-                    id: res.data.id,
-                    first: res.data.first,
-                    last: res.data.last,
-                    email: res.data.email,
-                    bio: res.data.bio,
-                    profilepic: res.data.profilepic || this.state.profilepic
+                    //with all user info and friendshipStatus
+                    otherId: res.data.otherId,
+                    otherFirst: res.data.otherFirst,
+                    otherLast: res.data.otherLast,
+                    otherEmail: res.data.otherEmail,
+                    otherBio: res.data.otherBio,
+                    otherProfilepic:
+                        res.data.otherProfilepic || this.state.otherProfilepic
                 });
             }
         });
@@ -37,12 +40,13 @@ export default class OtherProfile extends Component {
         //If they are different then this.setState() which will rerender the page.
         if (this.props != nextProps) {
             this.setState({
-                id: nextProps.id,
-                first: nextProps.first,
-                last: nextProps.last,
-                email: nextProps.email,
-                bio: nextProps.bio,
-                profilepic: nextProps.profilepic || this.state.profilepic
+                otherId: nextProps.otherId,
+                otherFirst: nextProps.otherFirst,
+                otherLast: nextProps.otherLast,
+                otherEmail: nextProps.otherEmail,
+                otherBio: nextProps.otherBio,
+                otherProfilepic:
+                    nextProps.otherProfilepic || this.state.otherProfilepic
             });
         } else {
             return;
@@ -55,16 +59,17 @@ export default class OtherProfile extends Component {
                 <div id="app__cover-background" />
                 <div id="profilepic__outer-box">
                     <img
-                        src={this.state.profilepic}
-                        alt={`${this.state.first} ${this.state.last}`}
+                        src={this.state.otherProfilepic}
+                        alt={`${this.state.otherFirst} ${this.state.otherLast}`}
                     />
                 </div>
+                <FriendButton otherId={this.props.match.params.userId} />
                 <div>
                     <h1>
-                        {this.state.first} {this.state.last}
+                        {this.state.otherFirst} {this.state.otherLast}
                     </h1>
                     <div>
-                        <p> {this.state.bio} </p>
+                        <p> {this.state.otherBio} </p>
                     </div>
                 </div>
             </div>

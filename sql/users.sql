@@ -2,11 +2,11 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    first VARCHAR(200) NOT NULL,
-    last VARCHAR(200) NOT NULL,
-    email VARCHAR(200) NOT NULL UNIQUE,
-    hashed_password VARCHAR(200) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    profile_pic_url VARCHAR(300),
-    bio VARCHAR(300)
+    first VARCHAR(100) NOT NULL,
+    last VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    hashed_password VARCHAR(100) NOT NULL,
+    profile_pic_url TEXT,
+    bio TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
