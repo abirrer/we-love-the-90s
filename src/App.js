@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import Profile from "./Profile.js";
 import ProfilePic from "./ProfilePic.js";
 import ProfilePicUpload from "./ProfilePicUpload.js";
+import OtherProfile from "./OtherProfile.js";
 
 // ------------------------------------------------------------ //
 
@@ -65,8 +66,10 @@ export default class App extends React.Component {
             <div>
                 <BrowserRouter>
                     <div>
-                        <h1>We &#9829; The Nineties</h1>
+                        <h1>We &hearts; The Nineties</h1>
                         <Link to="/">Profile</Link>
+                        <br />
+                        <Link to="/user/1">Other Profile</Link>
                         <br />
                         <ProfilePic
                             profilepic={profilepic}
@@ -96,6 +99,11 @@ export default class App extends React.Component {
                                         }
                                     />
                                 )}
+                            />
+                            <Route
+                                exact
+                                path="/user/:userId"
+                                component={OtherProfile}
                             />
                         </div>
                     </div>

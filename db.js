@@ -49,8 +49,13 @@ function updateBio(id, bio) {
     );
 }
 
+function getOtherUserProfile(id) {
+    return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
+}
+
 exports.addNewUser = addNewUser;
 exports.getPassword = getPassword;
 exports.updateProfilePic = updateProfilePic;
 exports.getUserProfile = getUserProfile;
 exports.updateBio = updateBio;
+exports.getOtherUserProfile = getOtherUserProfile;

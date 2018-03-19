@@ -216,3 +216,20 @@ For the submit bio button:
         </div>
     </div>
 </BrowserRouter>;
+
+//19 March Notes for PART 5
+
+To Dos:
+- Make OtherProfile component
+- Make route for that component, with dynamic url
+- in componentDIdMount, do a GET for the other user's info using params
+- Make route in express server (index.js) and do the SELECT db.query. res.json back the info
+- if the user tries to view their own profile, they should be redirected
+  back to / using the history.push() method.
+- if your component does not rerender when clicking a link to a different user,
+  you might have to use componentWillREceiveProps and compare the old state to the newProps
+
+
+If user wants to attempt their own profile, check in the server app.get request
+if req.session.user.id is the same as req.params.id then in the axios request,
+redirect them to the ('/') profile page.  this.props.history.push('/')

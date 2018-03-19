@@ -10,7 +10,8 @@ const {
     getPassword,
     updateProfilePic,
     getUserProfile,
-    updateBio
+    updateBio,
+    getOtherUserProfile
 } = require("./db");
 const csrf = require("csurf");
 const s3 = require("./s3");
@@ -80,23 +81,21 @@ app.use(bodyParser.json());
 //ROUTES
 
 app.post("/welcome/register", (req, res) => {
-    console.log("inside POST welcome page", req.body);
     if (
         !req.body.first ||
         !req.body.last ||
         !req.body.email ||
         !req.body.password
     ) {
-        console.log("error in post step 1/submission fields");
+        console.log("new user register data fields were not complete");
+
         res.json({
             success: false,
             error: "Please complete all fields before submitting."
         });
     } else {
-        console.log("made it to post step 2");
         hashPassword(req.body.password)
             .then(hashedPassword => {
-                console.log(hashedPassword);
                 return addNewUser(
                     req.body.first,
                     req.body.last,
@@ -105,10 +104,8 @@ app.post("/welcome/register", (req, res) => {
                 );
             })
             .then(result => {
-                console.log(
-                    "Results were uploaded & returned: ",
-                    result.rows[0]
-                );
+                console.log("req.session was set successful");
+
                 req.session.user = {
                     id: result.rows[0].id,
                     first: result.rows[0].first,
@@ -116,7 +113,8 @@ app.post("/welcome/register", (req, res) => {
                 };
             })
             .then(() => {
-                console.log("registration was complete");
+                console.log("new user registration was complete");
+
                 res.json({
                     success: true
                 });
@@ -131,8 +129,9 @@ app.post("/welcome/register", (req, res) => {
 });
 
 app.post("/welcome/login", (req, res) => {
-    console.log("inside POST login page", req.body);
     if (!req.body.email || !req.body.password) {
+        console.log("login fields were not complete");
+
         res.json({
             success: false,
             error: "Please complete all fields before submitting."
@@ -144,7 +143,6 @@ app.post("/welcome/login", (req, res) => {
                 getPasswordResult.rows[0].hashed_password
             )
                 .then(result => {
-                    console.log(result);
                     if (result == true) {
                         req.session.user = {
                             id: getPasswordResult.rows[0].id,
@@ -152,6 +150,8 @@ app.post("/welcome/login", (req, res) => {
                             last: getPasswordResult.rows[0].last
                         };
                     } else {
+                        console.log("login fields were not valid and login failed");
+
                         res.json({
                             success: false,
                             error:
@@ -160,6 +160,8 @@ app.post("/welcome/login", (req, res) => {
                     }
                 })
                 .then(() => {
+                    console.log("user login verification was successful and req.sessions were set!");
+
                     res.json({
                         success: true
                     });
@@ -174,15 +176,14 @@ app.post("/welcome/login", (req, res) => {
 app.get("/profile", (req, res) => {
     getUserProfile(req.session.user.id)
         .then(result => {
-            console.log(result);
-            // result.rows[0].profile_pic_url = config.s3Url + result.rows[0].image; //this is replaced by the concat within the res.json.
+            console.log("user profile data pull was successful!");
+
             result.rows[0].profile_pic_url =
                 result.rows[0].profile_pic_url &&
                 config.s3Url + result.rows[0].profile_pic_url;
 
-            console.log("Profile pic: ", result.rows[0].profile_pic_url);
-
             res.json({
+                success: true
                 id: result.rows[0].id,
                 first: result.rows[0].first,
                 last: result.rows[0].last,
@@ -198,20 +199,18 @@ app.get("/profile", (req, res) => {
 
 app.post("/upload", uploader.single("profilepic"), s3.upload, (req, res) => {
     if (!req.file) {
-        console.log("error because upload fields not complete");
+
+        console.log("error because photo upload field not complete");
+
         res.json({
             success: false,
             error: "Please complete all fields before submitting."
         });
     } else {
-        console.log(
-            "got into upload POST request",
-            req.session.user.id,
-            req.body.profilepic
-        );
         updateProfilePic(req.session.user.id, req.file.filename)
             .then(result => {
-                console.log("upload success");
+                console.log("profile pic upload success");
+
                 res.json({
                     success: true,
                     profilepic: config.s3Url + result.rows[0].profile_pic_url
@@ -224,9 +223,10 @@ app.post("/upload", uploader.single("profilepic"), s3.upload, (req, res) => {
 });
 
 app.post("/updateBio", (req, res) => {
-    console.log("inside /updateBio POST request");
     updateBio(req.session.user.id, req.body.bio)
         .then(result => {
+            console.log("bio update was successful!");
+
             res.json({
                 success: true,
                 bio: result.rows[0].bio
@@ -235,6 +235,34 @@ app.post("/updateBio", (req, res) => {
         .catch(error => {
             console.log("error in updateBio POST request: ", error);
         });
+});
+
+app.get("/otherUser/:id", (req, res) => {
+    if (req.session.user.id == req.params.id) {
+        res.json({ sameProfile: true });
+    } else {
+        getOtherUserProfile(req.params.id)
+            .then(result => {
+                console.log("other user profile data pull was successful!");
+
+                result.rows[0].profile_pic_url =
+                    result.rows[0].profile_pic_url &&
+                    config.s3Url + result.rows[0].profile_pic_url;
+
+                res.json({
+                    success: true,
+                    id: result.rows[0].id,
+                    first: result.rows[0].first,
+                    last: result.rows[0].last,
+                    email: result.rows[0].email,
+                    profilepic: result.rows[0].profile_pic_url,
+                    bio: result.rows[0].bio
+                });
+            })
+            .catch(error => {
+                console.log("error in /otherUser GET request: ", error);
+            });
+    }
 });
 
 app.get("*", (req, res) => {
