@@ -1,3 +1,5 @@
+/* * * * * * * * * * * * * * Welcome Page Styling * * * * * * * * * * * * * */
+
 #welcome {
     background: url("/images/welcomebackground.jpg") no-repeat center center;
     /* fixed; */
@@ -67,36 +69,73 @@ button:hover {
     font-style: italic;
 }
 
-/* App CSS */
-/*
+/* * * * * * * * * * * * * * App Page Styling * * * * * * * * * * * * * */
+
+header {
+    width: 100%;
+    height: auto;
+    /* border: solid; */
+    position: sticky;
+    top: 0px;
+    margin-top: -8px;
+    margin-left: -8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-left: 10px;
+    background: #f6f8f9;
+    font-family: "Quicksand", sans-serif;
+    z-index: 10;
+}
+
+header h1 {
+    /* border: solid; */
+    margin-top: 0px;
+    text-decoration: none;
+    color: black;
+    font-size: 40px;
+}
+
+header img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    margin: 5px;
+    margin-top: 7px;
+    border-radius: 5px;
+}
+
+header img:hover {
+    cursor: pointer;
+}
+
 #app__cover-background {
     background: url("/images/coverphoto.jpg") no-repeat center center;
     background-size: cover;
-    height: 25%;
+    height: 30%;
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
     border-bottom: solid 20px #f6f8f9;
-} */
-
-#profilepic__outer-box img {
-    height: 250px;
-    width: 250px;
-    border: solid 20px #f6f8f9;
-    /* position: absolute;
-    top: 10%; */
-    object-fit: cover;
-    object-position: center;
 }
 
-/* #profilepic__outer-box {
+#profile #profilepic__outer-box img {
+    height: 200px;
+    width: 200px;
+    border: solid 20px #f6f8f9;
+    top: 10%;
+    object-fit: cover;
+    object-position: center;
+    /* z-index: 9; */
+}
+/*
+#profile #profilepic__outer-box {
     left: 0;
     width: 100%;
     height: 100%;
     border: solid;
     background-color: #f6f8f9;
 } */
-
-#app__outer-box h1 {
-}

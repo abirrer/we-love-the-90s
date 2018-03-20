@@ -57,7 +57,8 @@ function getFriendshipStatus(userId, otherUserId) {
     return db.query(
         `SELECT status, sender_id, recipient_id FROM friendships
         WHERE (recipient_id = $1 OR sender_id = $1)
-        AND (recipient_id = $2 OR sender_id = $2)`,
+        AND (recipient_id = $2 OR sender_id = $2)
+        AND (status = 1 OR status = 2)`,
         [userId, otherUserId]
     );
 }
@@ -90,7 +91,7 @@ function addFriendRequest(userId, otherUserId, friendshipStatus) {
     }
 }
 
-function withdrawFriendRequest(userId, otherUserId, friendshipStatus) {
+function updateFriendRequest(userId, otherUserId, friendshipStatus) {
     return db.query(
         `UPDATE friendships
         SET status = $3
@@ -109,4 +110,4 @@ exports.updateBio = updateBio;
 exports.getOtherUserProfile = getOtherUserProfile;
 exports.getFriendshipStatus = getFriendshipStatus;
 exports.addFriendRequest = addFriendRequest;
-exports.withdrawFriendRequest = withdrawFriendRequest;
+exports.updateFriendRequest = updateFriendRequest;

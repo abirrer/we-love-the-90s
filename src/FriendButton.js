@@ -6,7 +6,7 @@ export default class FriendButton extends Component {
         super(props);
 
         this.state = {
-            senderId: this.props.otherId,
+            senderId: null,
             receiverId: null,
             friendshipStatus: null
         };
@@ -14,6 +14,7 @@ export default class FriendButton extends Component {
     }
 
     componentDidMount() {
+        console.log("this.state before: ", this.state);
         axios
             .get("/loadFriendButton/" + this.props.otherId)
             .then(res => {
@@ -27,7 +28,7 @@ export default class FriendButton extends Component {
                     friendshipStatus: res.data.friendshipStatus
                 });
             })
-            .then(() => console.log("new state friend button: ", this.state));
+            .then(() => console.log("this.state after: ", this.state));
     }
 
     handleClick(e) {
@@ -35,7 +36,7 @@ export default class FriendButton extends Component {
 
         const { friendshipStatus } = this.state;
 
-        const data = {
+        let data = {
             senderId: this.state.senderId,
             receiverId: this.state.receiverId,
             friendshipStatus: this.state.friendshipStatus
@@ -47,60 +48,65 @@ export default class FriendButton extends Component {
             friendshipStatus == 4 ||
             friendshipStatus == 5
         ) {
-            axios
-                .post("/sendfriendrequest", data)
-                .then(res => {
-                    this.setState({
-                        senderId: res.data.senderId,
-                        receiverId: res.data.receiverId || this.props.otherId,
-                        friendshipStatus: res.data.friendshipStatus
-                    });
-                })
-                .then(() =>
-                    console.log("new state after friend request: ", this.state)
-                );
-            // } else if (friendshipStatus == 2) {
-            //     axios.post("/unfriend");
+            axios.post("/sendfriendrequest", data).then(res => {
+                this.setState({
+                    senderId: res.data.senderId,
+                    receiverId: res.data.receiverId || this.props.otherId,
+                    friendshipStatus: res.data.friendshipStatus
+                });
+            });
+        } else if (friendshipStatus == 2) {
+            data.friendshipStatus = 4;
+
+            axios.post("/updatefriendrequest", data).then(res => {
+                this.setState({
+                    senderId: res.data.senderId,
+                    receiverId: res.data.receiverId || this.props.otherId,
+                    friendshipStatus: res.data.friendshipStatus
+                });
+            });
         } else if (friendshipStatus == 1) {
-            // if (e.target.text == "Withdraw Friend Request") {
-            axios
-                .post("/withdrawfriendrequest", data)
-                .then(res => {
-                    this.setState({
-                        senderId: res.data.senderId,
-                        receiverId: res.data.receiverId || this.props.otherId,
-                        friendshipStatus: res.data.friendshipStatus
-                    });
-                })
-                .then(() =>
-                    console.log("new state after friend request: ", this.state)
-                );
-            // } else if (
-            //     e.target.text == "Accept Friend Request" ||
-            //     "Reject Friend Request"
-            // ) {
-            //     axios.post("/updatefriendrequest");
-            // }
+            if (this.props.otherId == this.state.receiverId) {
+                data.friendshipStatus = 5;
+            } else if (this.props.otherId != this.state.receiverId) {
+                data.friendshipStatus = 2;
+            }
+
+            axios.post("/updatefriendrequest", data).then(res => {
+                this.setState({
+                    senderId: res.data.senderId,
+                    receiverId: res.data.receiverId || this.props.otherId,
+                    friendshipStatus: res.data.friendshipStatus
+                });
+            });
         }
     }
 
     render() {
         return (
             <button onClick={this.handleClick}>
-                {getButtonText(this.state.friendshipStatus)}
+                {getButtonText(
+                    this.state.friendshipStatus,
+                    this.props.otherId,
+                    this.state.receiverId
+                )}
             </button>
         );
     }
 }
 
-function getButtonText(friendshipStatus) {
+function getButtonText(friendshipStatus, otherId, receiverId) {
     var text = "";
     switch (friendshipStatus) {
         case 0: //no friendship
             text = "Send Friend Request";
             break;
         case 1: //pending
-            text = "Withdraw Friend Request"; // and need to have another button for "Accept Friend Request"
+            if (otherId == receiverId) {
+                text = "Withdraw Friend Request";
+            } else {
+                text = "Accept Friend Request";
+            }
             break;
         case 2: //accepted
             text = "Unfriend";

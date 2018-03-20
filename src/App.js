@@ -66,22 +66,25 @@ export default class App extends React.Component {
             <div>
                 <BrowserRouter>
                     <div>
-                        <h1>We &hearts; The Nineties</h1>
-                        <Link to="/">Profile</Link>
-                        <br />
-                        <Link to="/user/1">Other Profile</Link>
-                        <br />
-                        <ProfilePic
-                            profilepic={profilepic}
-                            toggleUploadModal={this.toggleUploadModal}
-                            setImage={this.setImage}
-                            first={this.props.first}
-                            last={this.props.last}
-                        />
+                        <header>
+                            <Link to="/" style={{ textDecoration: "none" }}>
+                                <h1>We &hearts; The Nineties</h1>
+                            </Link>
+                            <br />
+                            <Link to="/user/1">Other Profile</Link>
+                            <br />
+                            <ProfilePic
+                                profilepic={profilepic}
+                                toggleUploadModal={this.toggleUploadModal}
+                                setImage={this.setImage}
+                                first={this.props.first}
+                                last={this.props.last}
+                            />
+                        </header>
                         {this.state.showUploadModal && (
                             <ProfilePicUpload setImage={this.setImage} />
                         )}
-                        <div>
+                        <div id="profile">
                             <Route
                                 exact
                                 path="/"

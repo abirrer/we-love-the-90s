@@ -14,7 +14,7 @@ const {
     getOtherUserProfile,
     getFriendshipStatus,
     addFriendRequest,
-    withdrawFriendRequest
+    updateFriendRequest
 } = require("./db");
 const csrf = require("csurf");
 const s3 = require("./s3");
@@ -274,12 +274,13 @@ app.get("/otherUser/:id", (req, res) => {
 app.get("/loadFriendButton/:otherId", (req, res) => {
     getFriendshipStatus(req.session.user.id, req.params.otherId)
         .then(result => {
+            // console.log("result from initial query: ", result);
             if (!result.rows.length) {
                 res.json({
                     friendshipStatus: 0
                 });
             } else {
-                console.log("load friend button was successful!");
+                console.log("friend button was loaded successful!");
                 res.json({
                     senderId: result.rows[0].sender_id,
                     receiverId: result.rows[0].recipient_id,
@@ -288,7 +289,12 @@ app.get("/loadFriendButton/:otherId", (req, res) => {
             }
         })
         .catch(error => {
-            console.log("error in /loadFriendButton GET request: ", error);
+            console.log(
+                "error in /loadFriendButton GET request: ",
+                error,
+                req.params.otherId,
+                req.session.user.id
+            );
         });
 });
 
@@ -314,16 +320,15 @@ app.post("/sendfriendrequest", (req, res) => {
 
 // app.post("/updatefriendrequest", (req, res) => {});
 
-app.post("/withdrawfriendrequest", (req, res) => {
-    let friendshipStatus = 5;
-    withdrawFriendRequest(
+app.post("/updatefriendrequest", (req, res) => {
+    updateFriendRequest(
         req.session.user.id,
         req.body.receiverId,
-        friendshipStatus
+        req.body.friendshipStatus
     )
         .then(result => {
             console.log(
-                "withdraw friend request was successful!",
+                "update friend request was successful!",
                 result.rows[0]
             );
 
@@ -334,10 +339,7 @@ app.post("/withdrawfriendrequest", (req, res) => {
             });
         })
         .catch(error => {
-            console.log(
-                "error in /withdrawfriendrequest POST request: ",
-                error
-            );
+            console.log("error in /updatefriendrequest POST request: ", error);
         });
 });
 
