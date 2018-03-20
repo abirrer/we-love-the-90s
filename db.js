@@ -62,15 +62,32 @@ function getFriendshipStatus(userId, otherUserId) {
     );
 }
 
+// // function add
+// INSERT INTO users (first, last, email, hashed_password) VALUES ($1, $2, $3, $4) RETURNING *`,
+// [first, last, email, password]
+
 function addFriendRequest(userId, otherUserId, friendshipStatus) {
-    return db.query(
-        `UPDATE friendships
-        SET status = $3
-        WHERE (recipient_id = $1 OR sender_id = $1)
-        AND (recipient_id = $2 OR sender_id = $2)
-        RETURNING *`,
-        [userId, otherUserId, friendshipStatus]
-    );
+    if (friendshipStatus == 0) {
+        return db.query(
+            `INSERT INTO friendships (sender_id, recipient_id, status)
+            VALUES ($1, $2, 1)
+            RETURNING *`,
+            [userId, otherUserId]
+        );
+    } else if (
+        friendshipStatus == 3 ||
+        friendshipStatus == 4 ||
+        friendshipStatus == 5
+    ) {
+        return db.query(
+            `UPDATE friendships
+            SET status = 1
+            WHERE (recipient_id = $1 OR sender_id = $1)
+            AND (recipient_id = $2 OR sender_id = $2)
+            RETURNING *`,
+            [userId, otherUserId]
+        );
+    }
 }
 
 function withdrawFriendRequest(userId, otherUserId, friendshipStatus) {

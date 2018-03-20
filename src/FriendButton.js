@@ -6,9 +6,9 @@ export default class FriendButton extends Component {
         super(props);
 
         this.state = {
-            senderId: "",
-            receiverId: "",
-            friendshipStatus: ""
+            senderId: this.props.otherId,
+            receiverId: null,
+            friendshipStatus: null
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -41,13 +41,40 @@ export default class FriendButton extends Component {
             friendshipStatus: this.state.friendshipStatus
         };
 
-        if (friendshipStatus == 0 || 3 || 4 || 5) {
-            axios.post("/sendfriendrequest", { data });
+        if (
+            friendshipStatus == 0 ||
+            friendshipStatus == 3 ||
+            friendshipStatus == 4 ||
+            friendshipStatus == 5
+        ) {
+            axios
+                .post("/sendfriendrequest", data)
+                .then(res => {
+                    this.setState({
+                        senderId: res.data.senderId,
+                        receiverId: res.data.receiverId || this.props.otherId,
+                        friendshipStatus: res.data.friendshipStatus
+                    });
+                })
+                .then(() =>
+                    console.log("new state after friend request: ", this.state)
+                );
             // } else if (friendshipStatus == 2) {
             //     axios.post("/unfriend");
         } else if (friendshipStatus == 1) {
             // if (e.target.text == "Withdraw Friend Request") {
-            axios.post("/withdrawfriendrequest", { data });
+            axios
+                .post("/withdrawfriendrequest", data)
+                .then(res => {
+                    this.setState({
+                        senderId: res.data.senderId,
+                        receiverId: res.data.receiverId || this.props.otherId,
+                        friendshipStatus: res.data.friendshipStatus
+                    });
+                })
+                .then(() =>
+                    console.log("new state after friend request: ", this.state)
+                );
             // } else if (
             //     e.target.text == "Accept Friend Request" ||
             //     "Reject Friend Request"

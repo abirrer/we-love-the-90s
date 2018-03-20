@@ -274,14 +274,12 @@ app.get("/otherUser/:id", (req, res) => {
 app.get("/loadFriendButton/:otherId", (req, res) => {
     getFriendshipStatus(req.session.user.id, req.params.otherId)
         .then(result => {
-            console.log("here are the results: ", result);
-
             if (!result.rows.length) {
-                //need to do another query to insert a row for new users and set status to 0
                 res.json({
                     friendshipStatus: 0
                 });
             } else {
+                console.log("load friend button was successful!");
                 res.json({
                     senderId: result.rows[0].sender_id,
                     receiverId: result.rows[0].recipient_id,
@@ -297,19 +295,50 @@ app.get("/loadFriendButton/:otherId", (req, res) => {
 app.post("/sendfriendrequest", (req, res) => {
     addFriendRequest(
         req.session.user.id,
-        req.params.receiverId,
-        req.params.friendshipStatus
-    );
+        req.body.receiverId,
+        req.body.friendshipStatus
+    )
+        .then(result => {
+            console.log("send friend request was successful!", result.rows[0]);
+
+            res.json({
+                senderId: result.rows[0].sender_id,
+                receiverId: result.rows[0].recipient_id,
+                friendshipStatus: result.rows[0].status
+            });
+        })
+        .catch(error => {
+            console.log("error in /sendfriendrequest POST request: ", error);
+        });
 });
 
 // app.post("/updatefriendrequest", (req, res) => {});
 
 app.post("/withdrawfriendrequest", (req, res) => {
+    let friendshipStatus = 5;
     withdrawFriendRequest(
         req.session.user.id,
-        req.params.receiverId,
-        req.params.friendshipStatus
-    );
+        req.body.receiverId,
+        friendshipStatus
+    )
+        .then(result => {
+            console.log(
+                "withdraw friend request was successful!",
+                result.rows[0]
+            );
+
+            res.json({
+                senderId: result.rows[0].sender_id,
+                receiverId: result.rows[0].recipient_id,
+                friendshipStatus: result.rows[0].status
+            });
+        })
+        .catch(error => {
+            console.log(
+                "error in /withdrawfriendrequest POST request: ",
+                error
+            );
+        });
 });
 
 // app.post("/unfriend", (req, res) => {});
