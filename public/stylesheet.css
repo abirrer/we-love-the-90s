@@ -106,6 +106,21 @@ header img:hover {
 
 /* * * * * * * * * * * * * * Profile Page Styling * * * * * * * * * * * * * */
 
+#profile {
+    display: flex;
+    justify-content: center;
+}
+
+#profile__outer-box {
+    background: #f6f8f9;
+    z-index: -2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
 #profile__cover-background {
     background: url("/images/coverphoto.jpg") no-repeat center center;
     background-size: cover;
@@ -114,17 +129,51 @@ header img:hover {
     position: absolute;
     top: 0;
     left: 0;
-    border-bottom: solid 20px #f6f8f9;
+    /* border-bottom: solid 10px #f6f8f9; */
     z-index: -1;
+}
+
+#profile #profilepic__outer-box {
+    display: flex;
+    justify-content: center;
 }
 
 #profile #profilepic__outer-box img {
     height: 200px;
     width: 200px;
-    border: solid 20px #f6f8f9;
-    top: 10%;
+    border: solid 15px #f6f8f9;
+    border-radius: 10px;
+    background: #f6f8f9;
+    margin-top: 100px;
     object-fit: cover;
     object-position: center;
+    display: flex;
+    justify-content: center;
+}
+
+#profile__information {
+    display: flex;
+    align-items: center;
+    /* border: solid; */
+    flex-direction: column;
+    font-family: "Quicksand", sans-serif;
+}
+
+#profile__information h1 {
+    margin-top: 0px;
+}
+
+#bio-button {
+    display: flex;
+    align-items: center;
+    /* border: solid; */
+    flex-direction: column;
+}
+
+#friend-button {
+    width: auto;
+    padding-right: 20px;
+    padding-left: 20px;
 }
 
 /* * * * * * * * * * * * * * Pic Upload Modal Styling * * * * * * * * * * * * * */
@@ -143,26 +192,33 @@ header img:hover {
 }
 
 #profilepic-upload__inner-box {
-    height: 200px;
+    height: 180px;
     width: 400px;
     background: #f6f8f9;
     font-family: "Quicksand", sans-serif;
     z-index: 12;
     border-radius: 10px;
     padding: 20px;
-    /* display: grid; */
-    /* justify-content: space-around; */
-    /* align-items: center; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #profilepic-upload__inner-box h2 {
     margin-top: -40px;
 }
 
+#profilepic-upload__inner-box form {
+    display: flex;
+    align-items: center;
+    /* border: solid; */
+    flex-direction: column;
+}
+
 #close-button {
     position: relative;
     top: -30px;
-    right: -390px;
+    right: -200px;
 }
 
 #close-button h3 {

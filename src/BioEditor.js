@@ -44,7 +44,7 @@ export default class BioEditor extends Component {
 
     render() {
         return (
-            <div>
+            <div id="bio-editor">
                 <input
                     onChange={this.handleChange}
                     type="text"

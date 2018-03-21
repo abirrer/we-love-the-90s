@@ -61,7 +61,7 @@ export default class ProfilePicUpload extends Component {
                     {this.state.error && (
                         <p className="error-message">{this.state.error}</p>
                     )}
-                    <form className="profilepic-upload__modal">
+                    <form>
                         <input
                             onChange={this.handleChange}
                             type="file"

@@ -70,9 +70,7 @@ export default class App extends React.Component {
                             <Link to="/" style={{ textDecoration: "none" }}>
                                 <h1>We &hearts; The Nineties</h1>
                             </Link>
-                            <br />
                             <Link to="/user/1">Other Profile</Link>
-                            <br />
                             <ProfilePic
                                 profilepic={profilepic}
                                 toggleUploadModal={this.toggleUploadModal}

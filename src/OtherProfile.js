@@ -63,14 +63,12 @@ export default class OtherProfile extends Component {
                         alt={`${this.state.otherFirst} ${this.state.otherLast}`}
                     />
                 </div>
-                <FriendButton otherId={this.props.match.params.userId} />
                 <div id="profile__information">
                     <h1>
                         {this.state.otherFirst} {this.state.otherLast}
                     </h1>
-                    <div>
-                        <p> {this.state.otherBio} </p>
-                    </div>
+                    <p> {this.state.otherBio} </p>
+                    <FriendButton otherId={this.props.match.params.userId} />
                 </div>
             </div>
         );

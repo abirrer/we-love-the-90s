@@ -36,20 +36,18 @@ export default class Profile extends Component {
                     <h1>
                         {this.props.first} {this.props.last}
                     </h1>
-                    <div>
-                        {this.state.showBioEditor && (
-                            <BioEditor
-                                toggleBioModal={this.toggleBioModal}
-                                setBio={this.props.setBio}
-                            />
-                        )}
-                        {!this.state.showBioEditor && (
-                            <Bio
-                                bio={this.props.bio}
-                                toggleBioModal={this.toggleBioModal}
-                            />
-                        )}
-                    </div>
+                    {this.state.showBioEditor && (
+                        <BioEditor
+                            toggleBioModal={this.toggleBioModal}
+                            setBio={this.props.setBio}
+                        />
+                    )}
+                    {!this.state.showBioEditor && (
+                        <Bio
+                            bio={this.props.bio}
+                            toggleBioModal={this.toggleBioModal}
+                        />
+                    )}
                 </div>
             </div>
         );

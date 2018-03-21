@@ -84,7 +84,7 @@ export default class FriendButton extends Component {
 
     render() {
         return (
-            <button onClick={this.handleClick}>
+            <button id="friend-button" onClick={this.handleClick}>
                 {getButtonText(
                     this.state.friendshipStatus,
                     this.props.otherId,
