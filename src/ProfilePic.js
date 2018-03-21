@@ -12,5 +12,3 @@ export default function ProfilePic(props) {
         </div>
     );
 }
-
-// <button onClick={props.toggleUploadModal}>Toggle Upload Modal</button>;

@@ -52,19 +52,24 @@ export default class ProfilePicUpload extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Upload A New Profile Picture</h2>
-                {this.state.error && (
-                    <p className="error-message">{this.state.error}</p>
-                )}
-                <form className="profilepic-upload__modal">
-                    <input
-                        onChange={this.handleChange}
-                        type="file"
-                        name="profilepic"
-                    />
-                    <button onClick={this.handleSubmit}>Upload</button>
-                </form>
+            <div id="profilepic-upload__outer-box">
+                <div id="profilepic-upload__inner-box">
+                    <div id="close-button">
+                        <h3 onClick={this.props.toggleUploadModal}>X</h3>
+                    </div>
+                    <h2>Upload A New Profile Picture</h2>
+                    {this.state.error && (
+                        <p className="error-message">{this.state.error}</p>
+                    )}
+                    <form className="profilepic-upload__modal">
+                        <input
+                            onChange={this.handleChange}
+                            type="file"
+                            name="profilepic"
+                        />
+                        <button onClick={this.handleSubmit}>Upload</button>
+                    </form>
+                </div>
             </div>
         );
     }

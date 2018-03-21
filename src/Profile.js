@@ -23,8 +23,8 @@ export default class Profile extends Component {
 
     render() {
         return (
-            <div id="app__outer-box">
-                <div id="app__cover-background" />
+            <div id="profile__outer-box">
+                <div id="profile__cover-background" />
                 <ProfilePic
                     toggleUploadModal={this.props.toggleUploadModal}
                     profilepic={this.props.profilepic}
@@ -32,7 +32,7 @@ export default class Profile extends Component {
                     last={this.props.last}
                     setImage={this.props.setImage}
                 />
-                <div>
+                <div id="profile__information">
                     <h1>
                         {this.props.first} {this.props.last}
                     </h1>
@@ -55,11 +55,3 @@ export default class Profile extends Component {
         );
     }
 }
-
-// Where to add this?
-// {this.state.showUploadModal && (
-//     <ProfilePicUpload
-//         toggleUploadModal={this.toggleUploadModal}
-//         setImage={this.setImage}
-//     />
-// )}

@@ -82,7 +82,10 @@ export default class App extends React.Component {
                             />
                         </header>
                         {this.state.showUploadModal && (
-                            <ProfilePicUpload setImage={this.setImage} />
+                            <ProfilePicUpload
+                                setImage={this.setImage}
+                                toggleUploadModal={this.toggleUploadModal}
+                            />
                         )}
                         <div id="profile">
                             <Route

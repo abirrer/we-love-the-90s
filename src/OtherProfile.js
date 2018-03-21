@@ -55,8 +55,8 @@ export default class OtherProfile extends Component {
 
     render() {
         return (
-            <div id="app__outer-box">
-                <div id="app__cover-background" />
+            <div id="profile__outer-box">
+                <div id="profile__cover-background" />
                 <div id="profilepic__outer-box">
                     <img
                         src={this.state.otherProfilepic}
@@ -64,7 +64,7 @@ export default class OtherProfile extends Component {
                     />
                 </div>
                 <FriendButton otherId={this.props.match.params.userId} />
-                <div>
+                <div id="profile__information">
                     <h1>
                         {this.state.otherFirst} {this.state.otherLast}
                     </h1>
