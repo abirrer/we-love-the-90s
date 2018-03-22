@@ -14,7 +14,8 @@ const {
     getOtherUserProfile,
     getFriendshipStatus,
     addFriendRequest,
-    updateFriendRequest
+    updateFriendRequest,
+    getFriendList
 } = require("./db");
 const csrf = require("csurf");
 const s3 = require("./s3");
@@ -318,8 +319,6 @@ app.post("/sendfriendrequest", (req, res) => {
         });
 });
 
-// app.post("/updatefriendrequest", (req, res) => {});
-
 app.post("/updatefriendrequest", (req, res) => {
     updateFriendRequest(
         req.session.user.id,
@@ -343,7 +342,26 @@ app.post("/updatefriendrequest", (req, res) => {
         });
 });
 
-// app.post("/unfriend", (req, res) => {});
+app.get("/getfriends", (req, res) => {
+    getFriendList(req.session.user.id)
+        .then(result => {
+            console.log("get friend list was successful! ", result.rows);
+
+            result.rows.forEach(row => {
+                return (row.profile_pic_url =
+                    row.profile_pic_url && config.s3Url + row.profile_pic_url);
+            });
+
+            console.log("updated array looks like this: ", result.rows);
+
+            res.json({
+                users: result.rows
+            });
+        })
+        .catch(error => {
+            console.log("error in /friends GET request: ", error);
+        });
+});
 
 app.get("*", (req, res) => {
     if (!req.session.user && req.url != "/welcome") {

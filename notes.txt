@@ -299,3 +299,51 @@ switch (this.props.friendshipStatus) {
 return (
     <button onClick={this.handleClick}> {text} </button>
 )
+
+
+//NOTES for PART 7
+
+Need to make a server side route to "/friends"
+and a route on the app...?
+
+on the page will be two lists of users
+By each user will be buttons to accept or end friendship.
+Need an action when you first come to the tab to get this list.
+You should just do one query and get back one list.
+
+
+1. Actions.js
+    - export action creator functions:
+        - getFriendList
+        - makeFriend (can use the same route /updatefriendrequest & needs to be passed id of relevant user)
+        - endFriendship (can use the same route /updatefriendrequest & needs to be passed id of relevant user)
+2. Reducers.js
+    - export a single reducer function
+        - conditionals for MAKE_FRIEND, END_FRIENDSHIP, RECEIVE_FRIENDS_LIST actions
+        clone the state, and update the cloned object with the correct thing.
+        for get_friends, replace current state object with new state object with an array of friends and wannabese.
+        make friend and end friendship will look like make hot/not.
+3. start.js
+    - import your reducer, Provider, createStore, applyMiddleware, redux-promise, composeWithDevTools (check start.js in hot or not branch)
+    - call createStore and pass it your reducer and passing result of call to applyMiddleware to composeWithDevTools
+    - wrap App in Provider and pass your store to Provider as a prop
+4. App.js
+    - import default thing from Friends.js
+    - add "/friends" route with default thing from friends.js as the component for it.
+        (import Friends from "./friends")
+        <Route path="/Friends" component={Friends}/>
+5. Friends.js
+    - import the three action creators
+    - import connect from react-redux.
+    - write a mapStateToProps function
+        - set friends prop to list of users with status of 2 (filter out other statuses)
+        - set pendingFriends prop to list of users with status 1 (filter out other statuses)
+    - create a Friends component.
+        - component expects to be passed a list of friends and list of pending friends, and dispatch function as props.
+        - when component mounts, dispatch the GET_FRIENDS action, causing the list of users to be retrieved from server.
+        - in render, show list of pending friends (this.props.pendingfriends) and list of friends (this.props.friends)
+        - for each friend or pendingfriend, add a click handler for either accepting request or ending friendship
+            - click handlers should call this.props.dispatch and pass the appropriate action.
+        - there is no need to export this component.
+    - export as default the result of calling: export default connect(mapStateToProps)(Friends)
+6. server side stuff is normal things.
