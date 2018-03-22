@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axios";
 
 export function receiveFriendsList() {
     return axios.get("/getfriends").then(function({ data }) {
@@ -12,7 +12,7 @@ export function receiveFriendsList() {
 export function makeFriend(id) {
     return axios
         .post("/updatefriendrequest", {
-            id: id,
+            otherId: id,
             friendshipStatus: 2
         })
         .then(() => {
@@ -26,7 +26,7 @@ export function makeFriend(id) {
 export function endFriendship(id) {
     return axios
         .post("/updatefriendrequest", {
-            id: id,
+            otherId: id,
             friendshipStatus: 4
         })
         .then(() => {

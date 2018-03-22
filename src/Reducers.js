@@ -5,30 +5,14 @@ export default function(state = {}, action) {
         });
     }
 
-    if (action.type == "MAKE_FRIEND") {
+    if (action.type == "MAKE_FRIEND" || action.type == "END_FRIENDSHIP") {
         return {
             ...state,
             users: state.users.map(user => {
                 if (user.id == action.id) {
                     return {
                         ...user,
-                        friend: true
-                    };
-                } else {
-                    return user;
-                }
-            })
-        };
-    }
-
-    if (action.type == "END_FRIENDSHIP") {
-        return {
-            ...state,
-            users: state.users.map(user => {
-                if (user.id == action.id) {
-                    return {
-                        ...user,
-                        pendingFriend: true
+                        status: action.type == "MAKE_FRIEND" ? 2 : 4
                     };
                 } else {
                     return user;

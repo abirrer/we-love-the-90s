@@ -228,3 +228,49 @@ header img:hover {
 #close-button h3:hover {
     cursor: pointer;
 }
+
+/* * * * * * * * * * * * * * Friends Page Styling * * * * * * * * * * * * * */
+
+#friends h2 {
+    font-family: "Quicksand", sans-serif;
+    /* margin-left: 0px; */
+}
+
+#friends__outer-box {
+    /* border: groove; */
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    overflow: scroll;
+    font-family: "Quicksand", sans-serif;
+    /* background: #f6f8f9; */
+}
+
+.friends__inner-box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.friend-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.friend-box img {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.border {
+    background-color: #f6f8f9;
+    height: 2px;
+    width: 100%;
+    margin-bottom: 20px;
+}

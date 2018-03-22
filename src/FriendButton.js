@@ -39,7 +39,8 @@ export default class FriendButton extends Component {
         let data = {
             senderId: this.state.senderId,
             receiverId: this.state.receiverId,
-            friendshipStatus: this.state.friendshipStatus
+            friendshipStatus: this.state.friendshipStatus,
+            otherId: this.props.otherId
         };
 
         if (

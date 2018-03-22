@@ -2,6 +2,8 @@ import React from "react";
 import { receiveFriendsList, makeFriend, endFriendship } from "./actions";
 import { connect } from "react-redux";
 
+console.log(endFriendship);
+
 function mapStateToProps(state) {
     return {
         friends: state.users && state.users.filter(user => user.status == 2),
@@ -16,12 +18,7 @@ class Friends extends React.Component {
     }
 
     render() {
-        const {
-            friends,
-            pendingFriends,
-            makeFriend,
-            endFriendship
-        } = this.props;
+        const { friends, pendingFriends } = this.props;
 
         if (!friends) {
             return null;
@@ -52,9 +49,9 @@ class Friends extends React.Component {
         );
 
         const pendingFriendsElem = (
-            <div className="pendingFriends__inner-box">
+            <div className="friends__inner-box">
                 {pendingFriends.map(pendingFriend => (
-                    <div className="pendingFriend-box">
+                    <div className="friend-box">
                         <img src={pendingFriend.profile_pic_url} />
                         <div className="pendingFriend-box__info">
                             <h3>
@@ -77,7 +74,9 @@ class Friends extends React.Component {
         );
 
         return (
-            <div>
+            <div id="friends">
+                <h2>Friends</h2>
+                <div class="border" />
                 <div id="friends__outer-box">
                     {!friends.length && (
                         <div>You don't have any friends yet!</div>
@@ -85,7 +84,9 @@ class Friends extends React.Component {
                     {!!friends.length && friendsElem}
                 </div>
 
-                <div id="pending-friends__outer-box">
+                <h2>Pending Friend Requests</h2>
+                <div class="border" />
+                <div id="friends__outer-box">
                     {!pendingFriends.length && (
                         <div>You have no friend requests!</div>
                     )}

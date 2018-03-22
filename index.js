@@ -320,9 +320,10 @@ app.post("/sendfriendrequest", (req, res) => {
 });
 
 app.post("/updatefriendrequest", (req, res) => {
+    console.log(req.body.receiverId);
     updateFriendRequest(
         req.session.user.id,
-        req.body.receiverId,
+        req.body.otherId,
         req.body.friendshipStatus
     )
         .then(result => {

@@ -91,9 +91,8 @@ function updateFriendRequest(userId, otherUserId, friendshipStatus) {
     return db.query(
         `UPDATE friendships
         SET status = $3
-        WHERE (recipient_id = $1 OR sender_id = $1)
-        AND (recipient_id = $2 OR sender_id = $2)
-        AND (status = 1 OR status = 2)
+        WHERE (status = 1 OR status = 2)
+        AND ((recipient_id = $1 AND sender_id = $2) OR (recipient_id = $2 AND sender_id = $1))
         RETURNING *`,
         [userId, otherUserId, friendshipStatus]
     );
