@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:8080" }); //need to change this to be live on the internet.
 const compression = require("compression");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -374,6 +376,22 @@ app.get("*", (req, res) => {
     }
 });
 
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening.");
+});
+
+io.on("connection", function(socket) {
+    console.log(`socket with the id ${socket.id} is now connected`);
+
+    socket.on("disconnect", function() {
+        console.log(`socket with the id ${socket.id} is now disconnected`);
+    });
+
+    socket.on("thanks", function(data) {
+        console.log(data);
+    });
+
+    socket.emit("welcome", {
+        message: "Welcome. It is nice to see you"
+    });
 });
