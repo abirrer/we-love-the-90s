@@ -36,3 +36,24 @@ export function endFriendship(id) {
             };
         });
 }
+
+export function onlineUsers(onlineUsers) {
+    return {
+        type: "RECEIVE_ONLINE_USERS",
+        onlineUsers
+    };
+}
+
+export function userJoined(user) {
+    return {
+        type: "USER_JOINED",
+        user
+    };
+}
+
+export function userLeft(onlineUsers) {
+    return {
+        type: "USER_LEFT",
+        onlineUsers
+    };
+}

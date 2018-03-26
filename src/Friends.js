@@ -1,8 +1,6 @@
 import React from "react";
-import { receiveFriendsList, makeFriend, endFriendship } from "./actions";
+import { receiveFriendsList, makeFriend, endFriendship } from "./Actions";
 import { connect } from "react-redux";
-
-console.log(endFriendship);
 
 function mapStateToProps(state) {
     return {
@@ -85,7 +83,7 @@ class Friends extends React.Component {
                 </div>
 
                 <h2>Pending Friend Requests</h2>
-                <div class="border" />
+                <div className="border" />
                 <div id="friends__outer-box">
                     {!pendingFriends.length && (
                         <div>You have no friend requests!</div>

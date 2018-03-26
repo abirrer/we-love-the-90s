@@ -21,5 +21,26 @@ export default function(state = {}, action) {
         };
     }
 
+    if (action.type == "RECEIVE_ONLINE_USERS") {
+        return {
+            ...state,
+            onlineUsers: action.onlineUsers
+        };
+    }
+
+    if (action.type == "USER_JOINED") {
+        return {
+            ...state,
+            onlineUsers: [...state.onlineUsers, action.user]
+        };
+    }
+
+    if (action.type == "USER_LEFT") {
+        return {
+            ...state,
+            onlineUsers: action.onlineUsers
+        };
+    }
+
     return state;
 }

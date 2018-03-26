@@ -8,11 +8,16 @@ import { createStore, applyMiddleware } from "redux";
 import reduxPromise from "redux-promise";
 import { composeWithDevTools } from "redux-devtools-extension";
 import * as io from "socket.io-client";
+import { initSocket } from "./socket";
 
-const store = createStore(
+export const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(reduxPromise))
 );
+
+if (location.pathname != "/welcome") {
+    initSocket();
+}
 
 const elem = (
     <Provider store={store}>
@@ -27,12 +32,3 @@ if (location.pathname == "/welcome") {
 } else {
     ReactDOM.render(elem, document.querySelector("main"));
 }
-
-const socket = io.connect();
-
-socket.on("welcome", function(data) {
-    console.log(data);
-    socket.emit("thanks", {
-        message: "Thank you. It is great to be here."
-    });
-});

@@ -110,6 +110,13 @@ function getFriendList(userId) {
     );
 }
 
+function getUsersByIds(arrayOfIds) {
+    return db.query(
+        `SELECT first, last, id, profile_pic_url FROM users WHERE id = ANY($1)`,
+        [arrayOfIds]
+    );
+}
+
 exports.addNewUser = addNewUser;
 exports.getPassword = getPassword;
 exports.updateProfilePic = updateProfilePic;
@@ -120,3 +127,4 @@ exports.getFriendshipStatus = getFriendshipStatus;
 exports.addFriendRequest = addFriendRequest;
 exports.updateFriendRequest = updateFriendRequest;
 exports.getFriendList = getFriendList;
+exports.getUsersByIds = getUsersByIds;

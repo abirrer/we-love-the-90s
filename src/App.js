@@ -6,6 +6,7 @@ import ProfilePic from "./ProfilePic.js";
 import ProfilePicUpload from "./ProfilePicUpload.js";
 import OtherProfile from "./OtherProfile.js";
 import Friends from "./Friends.js";
+import Online from "./Online.js";
 
 // ------------------------------------------------------------ //
 
@@ -72,6 +73,7 @@ export default class App extends React.Component {
                                 <h1>We &hearts; The Nineties</h1>
                             </Link>
                             <Link to="/friends">My Friends</Link>
+                            <Link to="/online">Online Users</Link>
                             <Link to="/user/1">Other Profile</Link>
                             <ProfilePic
                                 profilepic={profilepic}
@@ -112,6 +114,8 @@ export default class App extends React.Component {
                                 component={OtherProfile}
                             />
                             <Route exact path="/friends" component={Friends} />
+
+                            <Route exact path="/online" component={Online} />
                         </div>
                     </div>
                 </BrowserRouter>

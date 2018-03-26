@@ -17,7 +17,8 @@ const {
     getFriendshipStatus,
     addFriendRequest,
     updateFriendRequest,
-    getFriendList
+    getFriendList,
+    getUsersByIds
 } = require("./db");
 const csrf = require("csurf");
 const s3 = require("./s3");
@@ -43,16 +44,28 @@ const uploader = multer({
     }
 });
 
+let onlineUsers = [];
+
 //MIDDLEWARE
 
 app.use(express.static("public"));
 
-app.use(
-    cookieSession({
-        secret: process.env.SESSION_SECRET || require("./secrets").secret,
-        maxAge: 1000 * 60 * 60 * 24 * 14 //this means 14 days of complete inactivity
-    })
-);
+// app.use(
+//     cookieSession({
+//         secret: process.env.SESSION_SECRET || require("./secrets").secret,
+//         maxAge: 1000 * 60 * 60 * 24 * 14 //this means 14 days of complete inactivity
+//     })
+// );
+
+const cookieSessionMiddleware = cookieSession({
+    secret: process.env.SESSION_SECRET || require("./secrets").secret,
+    maxAge: 1000 * 60 * 60 * 24 * 14 //this means 14 days of complete inactivity
+});
+
+app.use(cookieSessionMiddleware);
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(csrf());
 
@@ -381,17 +394,69 @@ server.listen(8080, function() {
 });
 
 io.on("connection", function(socket) {
-    console.log(`socket with the id ${socket.id} is now connected`);
+    if (!socket.request.session || !socket.request.session.user) {
+        return socket.disconnect(true);
+    }
+
+    const userId = socket.request.session.user.id;
+
+    //check to see if they are in the list already before pushing.
+    let index = onlineUsers.findIndex(function(obj) {
+        return obj.userId == userId;
+    });
+
+    onlineUsers.push({
+        userId,
+        socketId: socket.id
+    });
+
+    let allOnlineUserIds = onlineUsers.map(user => user.userId);
+
+    getUsersByIds(allOnlineUserIds).then(result => {
+        result.rows.forEach(row => {
+            return (row.profile_pic_url =
+                row.profile_pic_url && config.s3Url + row.profile_pic_url);
+        });
+
+        socket.emit("onlineUsers", result.rows);
+    });
+
+    if (index > -1) {
+        socket.broadcast.emit("userJoined", socket.request.session.user);
+    }
+
+    //can count how many times they are in the list and not emit if they are already in the list.
+
+    // socket.broadcast.emit("userJoined"); //should not emit this event, if there was already a user id in the list of online users
+
+    // console.log(`socket with the id ${socket.id} is now connected`);
 
     socket.on("disconnect", function() {
         console.log(`socket with the id ${socket.id} is now disconnected`);
-    });
 
-    socket.on("thanks", function(data) {
-        console.log(data);
-    });
+        let updatedOnlineUsers = onlineUsers.filter(
+            user => user.socketId != socket.id
+        );
 
-    socket.emit("welcome", {
-        message: "Welcome. It is nice to see you"
+        console.log(updatedOnlineUsers);
+
+        index = updatedOnlineUsers.findIndex(obj => {
+            return obj.userId == userId;
+        });
+
+        if (index == -1) {
+            io.sockets.emit("userLeft", updatedOnlineUsers);
+        }
+
+        //need to filter or splice the user out of it.
+        //If the user is still there, then don't emit.
+        //If they are gone then emit.
     });
 });
+
+//FOR ONLINE Users events:
+// onlineUsers = socket.emit
+//
+// userJoined = socket.broadcast.emit
+//
+// userLeft = io.sockets.emit (or socket.broadcast.emit)

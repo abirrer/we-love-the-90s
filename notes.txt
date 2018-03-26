@@ -347,3 +347,20 @@ You should just do one query and get back one list.
         - there is no need to export this component.
     - export as default the result of calling: export default connect(mapStateToProps)(Friends)
 6. server side stuff is normal things.
+
+
+//NOTES for PART 8
+
+Need to make a route for /online or something like that.
+need to add a link somewhere to get to the page for online users.
+need users first name, last name, id, photo
+
+3 socket io events are required: triggering, emitting, handling the event.
+
+1. when a user joins a site, that user needs to receive a list of online users to put it in the redux store.
+with friends component mounts, you go get the list. call this event online users.
+socket io receives an event, the data is an array of all online user info. Then dispatch an event.
+Not dom events, just events from socket io.
+User joined event who came online. When that event occurs, dispatch an action that passes info about user who joins.
+In reducer, replace list of online users to include the new one.
+Event when user leaves, user left.  When user event left, the payload (data), that person disappears.
