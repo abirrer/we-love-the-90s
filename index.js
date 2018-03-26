@@ -421,7 +421,8 @@ io.on("connection", function(socket) {
         socket.emit("onlineUsers", result.rows);
     });
 
-    if (index > -1) {
+    if (index == -1) {
+        console.log("online users berfore join: ", onlineUsers);
         socket.broadcast.emit("userJoined", socket.request.session.user);
     }
 
@@ -434,18 +435,16 @@ io.on("connection", function(socket) {
     socket.on("disconnect", function() {
         console.log(`socket with the id ${socket.id} is now disconnected`);
 
-        let updatedOnlineUsers = onlineUsers.filter(
-            user => user.socketId != socket.id
-        );
+        onlineUsers = onlineUsers.filter(user => user.socketId != socket.id);
 
-        console.log(updatedOnlineUsers);
+        console.log("new online users: ", onlineUsers);
 
-        index = updatedOnlineUsers.findIndex(obj => {
+        index = onlineUsers.findIndex(obj => {
             return obj.userId == userId;
         });
 
         if (index == -1) {
-            io.sockets.emit("userLeft", updatedOnlineUsers);
+            io.sockets.emit("userLeft", userId);
         }
 
         //need to filter or splice the user out of it.

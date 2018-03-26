@@ -51,9 +51,10 @@ export function userJoined(user) {
     };
 }
 
-export function userLeft(onlineUsers) {
+export function userLeft(id) {
+    console.log(id);
     return {
         type: "USER_LEFT",
-        onlineUsers
+        id
     };
 }
