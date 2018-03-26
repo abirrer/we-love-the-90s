@@ -18,7 +18,8 @@ const {
     addFriendRequest,
     updateFriendRequest,
     getFriendList,
-    getUsersByIds
+    getUsersByIds,
+    getUserById
 } = require("./db");
 const csrf = require("csurf");
 const s3 = require("./s3");
@@ -335,7 +336,6 @@ app.post("/sendfriendrequest", (req, res) => {
 });
 
 app.post("/updatefriendrequest", (req, res) => {
-    console.log(req.body.receiverId);
     updateFriendRequest(
         req.session.user.id,
         req.body.otherId,
@@ -367,8 +367,6 @@ app.get("/getfriends", (req, res) => {
                 return (row.profile_pic_url =
                     row.profile_pic_url && config.s3Url + row.profile_pic_url);
             });
-
-            console.log("updated array looks like this: ", result.rows);
 
             res.json({
                 users: result.rows
@@ -422,22 +420,17 @@ io.on("connection", function(socket) {
     });
 
     if (index == -1) {
-        console.log("online users berfore join: ", onlineUsers);
-        socket.broadcast.emit("userJoined", socket.request.session.user);
+        getUserById(socket.request.session.user.id).then(result => {
+            result.rows.forEach(row => {
+                return (row.profile_pic_url =
+                    row.profile_pic_url && config.s3Url + row.profile_pic_url);
+            });
+            socket.broadcast.emit("userJoined", result.rows[0]);
+        });
     }
 
-    //can count how many times they are in the list and not emit if they are already in the list.
-
-    // socket.broadcast.emit("userJoined"); //should not emit this event, if there was already a user id in the list of online users
-
-    // console.log(`socket with the id ${socket.id} is now connected`);
-
     socket.on("disconnect", function() {
-        console.log(`socket with the id ${socket.id} is now disconnected`);
-
         onlineUsers = onlineUsers.filter(user => user.socketId != socket.id);
-
-        console.log("new online users: ", onlineUsers);
 
         index = onlineUsers.findIndex(obj => {
             return obj.userId == userId;
@@ -446,16 +439,5 @@ io.on("connection", function(socket) {
         if (index == -1) {
             io.sockets.emit("userLeft", userId);
         }
-
-        //need to filter or splice the user out of it.
-        //If the user is still there, then don't emit.
-        //If they are gone then emit.
     });
 });
-
-//FOR ONLINE Users events:
-// onlineUsers = socket.emit
-//
-// userJoined = socket.broadcast.emit
-//
-// userLeft = io.sockets.emit (or socket.broadcast.emit)

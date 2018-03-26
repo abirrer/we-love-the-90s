@@ -52,7 +52,6 @@ export function userJoined(user) {
 }
 
 export function userLeft(id) {
-    console.log(id);
     return {
         type: "USER_LEFT",
         id

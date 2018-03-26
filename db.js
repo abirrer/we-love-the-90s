@@ -117,6 +117,13 @@ function getUsersByIds(arrayOfIds) {
     );
 }
 
+function getUserById(id) {
+    return db.query(
+        `SELECT first, last, id, profile_pic_url FROM users WHERE id = $1`,
+        [id]
+    );
+}
+
 exports.addNewUser = addNewUser;
 exports.getPassword = getPassword;
 exports.updateProfilePic = updateProfilePic;
@@ -128,3 +135,4 @@ exports.addFriendRequest = addFriendRequest;
 exports.updateFriendRequest = updateFriendRequest;
 exports.getFriendList = getFriendList;
 exports.getUsersByIds = getUsersByIds;
+exports.getUserById = getUserById;

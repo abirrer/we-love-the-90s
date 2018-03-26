@@ -36,7 +36,6 @@ export default function(state = {}, action) {
     }
 
     if (action.type == "USER_LEFT") {
-        console.log(action.id, state.onlineUsers);
         return {
             ...state,
             onlineUsers: state.onlineUsers.filter(user => user.id != action.id)
