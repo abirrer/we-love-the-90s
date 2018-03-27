@@ -34,12 +34,8 @@ class Chat extends React.Component {
     }
 
     componentDidUpdate() {
-        // this.chatContainer.scrollTop
-        // set overflow auto
-        //
-        //
-        //
-        //
+        this.chatContainer.scrollTop =
+            this.chatContainer.scrollHeight - this.chatContainer.clientHeight;
     }
 
     render() {
@@ -48,9 +44,9 @@ class Chat extends React.Component {
         const chatMessagesElem = (
             <div className="">
                 {chatMessages.map(chatMessage => (
-                    <div className="message-img">
+                    <div className="message-outer-box">
                         <img src={this.props.profilepic} />
-                        <div className="message-box">
+                        <div className="message-inner-box">
                             <p>
                                 <strong>
                                     {this.props.first} {this.props.last}:
@@ -78,7 +74,10 @@ class Chat extends React.Component {
                     {!!chatMessages.length && chatMessagesElem}
                 </div>
                 <div>
-                    <textarea onKeyDown={this.onKeyDown} />
+                    <textarea
+                        onKeyDown={this.onKeyDown}
+                        placeholder="Type a message to the group."
+                    />
                 </div>
             </div>
         );

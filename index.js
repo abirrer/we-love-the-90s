@@ -434,8 +434,10 @@ io.on("connection", function(socket) {
     socket.emit("chatMessages", messages);
 
     socket.on("chatMessage", message => {
+        let timestamp = new Date();
+
         const singleChatMessage = {
-            timestamp: new Date(),
+            timestamp: timestamp.toString(),
             messageText: message
         };
 
