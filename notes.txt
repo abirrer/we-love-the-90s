@@ -364,3 +364,46 @@ Not dom events, just events from socket io.
 User joined event who came online. When that event occurs, dispatch an action that passes info about user who joins.
 In reducer, replace list of online users to include the new one.
 Event when user leaves, user left.  When user event left, the payload (data), that person disappears.
+
+
+//NOTES FOR PART 9
+
+server - socket.emit("something") ----> client - socket.on("something")
+server - socket.on("something")   <---- client - socket.emit("anything")
+
+emit ("newChat", chatMessage) in our Chat component.
+Then socket.on(newChat) in server.js
+    then messages.push(newChatMessage)
+    then broadcast.emit(chatMessage)
+The broadcast goes to a socket.on(chatMessage)
+    then dispatch(chatMessage()) action.
+then goes to Actions
+then to Reducer
+then it goes to the store which shoots it to the component.
+
+This chat component will be a class component,
+inside componentDidMount we will dispatch an action this.props.dispatch(chatMessages()) action.
+This action will go to our server and get our chats
+
+socket.on('chats', messages =>)
+__________
+
+When newUser comes online:
+    1. emit chatMessages, and send along the 10 most recent chatMessages
+    2. inside socket.js, there should be an socket.on("chatMessages", messages => {...})
+    3. inside the callback, dispatch chatMessages action.
+    4. next stop is the reducer, where you will update the state with the new chatMessages
+
+For single chat messages
+    1. emit chatMessage from the client, with the text message.
+    2. add chatMessage to chatMessagesArray that lives on server
+    3. socket on Server, should broadcast the new chat along with id, first, last, pic, timestamp, (use slice for limiting array to 10)
+    4. inside socket.js, you should have a socket.on("chatMessage", msg => {})
+    5. inside callback, dispatch chatMessage action
+    6. update state in the reducer by adding the new chatMessage to the existing chat messages
+
+Setup/Component
+    1. create a new route /chat in the Browser Router, created using connect.
+
+Automatic Scrolling for Chatroom:
+    use scrollTop.

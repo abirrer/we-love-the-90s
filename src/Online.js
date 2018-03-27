@@ -36,6 +36,11 @@ class Online extends React.Component {
             <div id="">
                 <h2>Online Users</h2>
                 <div className="border" />
+
+                <a href="/chat">
+                    <button>Chat Room</button>
+                </a>
+
                 <div id="">
                     {!onlineUsers.length && (
                         <div>You are the only user currently online!</div>

@@ -7,6 +7,7 @@ import ProfilePicUpload from "./ProfilePicUpload.js";
 import OtherProfile from "./OtherProfile.js";
 import Friends from "./Friends.js";
 import Online from "./Online.js";
+import Chat from "./Chat.js";
 
 // ------------------------------------------------------------ //
 
@@ -74,6 +75,7 @@ export default class App extends React.Component {
                             </Link>
                             <Link to="/friends">My Friends</Link>
                             <Link to="/online">Online Users</Link>
+                            <Link to="/chat">Chat Room</Link>
                             <Link to="/user/1">Other Profile</Link>
                             <ProfilePic
                                 profilepic={profilepic}
@@ -116,6 +118,19 @@ export default class App extends React.Component {
                             <Route exact path="/friends" component={Friends} />
 
                             <Route exact path="/online" component={Online} />
+
+                            <Route
+                                exact
+                                path="/chat"
+                                render={() => (
+                                    <Chat
+                                        first={first}
+                                        last={last}
+                                        email={email}
+                                        profilepic={profilepic}
+                                    />
+                                )}
+                            />
                         </div>
                     </div>
                 </BrowserRouter>

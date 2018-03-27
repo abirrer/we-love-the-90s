@@ -57,3 +57,17 @@ export function userLeft(id) {
         id
     };
 }
+
+export function chatMessages(messages) {
+    return {
+        type: "CHAT_MESSAGES",
+        messages
+    };
+}
+
+export function chatMessage(singleChatMessage) {
+    return {
+        type: "CHAT_MESSAGE",
+        singleChatMessage
+    };
+}

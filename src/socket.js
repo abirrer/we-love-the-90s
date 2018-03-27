@@ -1,6 +1,12 @@
 import * as io from "socket.io-client";
 import { store } from "./start";
-import { onlineUsers, userJoined, userLeft } from "./Actions";
+import {
+    onlineUsers,
+    userJoined,
+    userLeft,
+    chatMessage,
+    chatMessages
+} from "./Actions";
 
 let socket;
 
@@ -21,5 +27,22 @@ export function initSocket() {
         socket.on("userLeft", id => {
             store.dispatch(userLeft(id));
         });
+
+        socket.on("chatMessage", singleChatMessage => {
+            store.dispatch(chatMessage(singleChatMessage));
+        });
+
+        socket.on("chatMessages", messages => {
+            store.dispatch(chatMessages(messages));
+        });
     }
+}
+
+// emitChatMessage("chatMessage", {
+//     msgData,
+//     userData
+// })
+
+export function emitChatMessage(message) {
+    socket.emit("chatMessage", message);
 }

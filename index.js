@@ -46,6 +46,7 @@ const uploader = multer({
 });
 
 let onlineUsers = [];
+let messages = [];
 
 //MIDDLEWARE
 
@@ -428,6 +429,22 @@ io.on("connection", function(socket) {
             socket.broadcast.emit("userJoined", result.rows[0]);
         });
     }
+
+    // Chat Message
+    socket.emit("chatMessages", messages);
+
+    socket.on("chatMessage", message => {
+        const singleChatMessage = {
+            timestamp: new Date(),
+            messageText: message
+        };
+
+        messages.push(singleChatMessage);
+        console.log(messages);
+
+        io.sockets.emit("chatMessage", singleChatMessage);
+    });
+    // });
 
     socket.on("disconnect", function() {
         onlineUsers = onlineUsers.filter(user => user.socketId != socket.id);
