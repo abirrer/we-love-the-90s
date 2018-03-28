@@ -79,19 +79,62 @@ export default class App extends React.Component {
                             <Link to="/" style={{ textDecoration: "none" }}>
                                 <h1>We &hearts; The 90s</h1>
                             </Link>
-                            <Link to="/friends">My Friends</Link>
-                            <Link to="/online">Online Users</Link>
-                            <Link to="/chat">Chat Room</Link>
-                            <Link to="/user/1">Other Profile</Link>
-                            <a href="/logout">Log Out</a>
-                            <img src="/images/menu.png" />
-                            <ProfilePic
-                                profilepic={profilepic}
-                                toggleUploadModal={this.toggleUploadModal}
-                                setImage={this.setImage}
-                                first={this.props.first}
-                                last={this.props.last}
-                            />
+                            <div id="header-menu-box">
+                                <img
+                                    id="menu-icon"
+                                    src="/images/menu.png"
+                                    onClick={this.toggleMenu}
+                                />
+                                {this.state.showMenu && (
+                                    <div id="menu-box">
+                                        <Link to="/" onClick={this.toggleMenu}>
+                                            My Profile
+                                        </Link>{" "}
+                                        <br />
+                                        <Link
+                                            to="/friends"
+                                            onClick={this.toggleMenu}
+                                        >
+                                            My Friends
+                                        </Link>{" "}
+                                        <br />
+                                        <Link
+                                            to="/online"
+                                            onClick={this.toggleMenu}
+                                        >
+                                            Online Users
+                                        </Link>{" "}
+                                        <br />
+                                        <Link
+                                            to="/chat"
+                                            onClick={this.toggleMenu}
+                                        >
+                                            Chat Room
+                                        </Link>{" "}
+                                        <br />
+                                        <Link
+                                            to="/user/1"
+                                            onClick={this.toggleMenu}
+                                        >
+                                            Other Profile
+                                        </Link>{" "}
+                                        <br />
+                                        <a
+                                            href="/logout"
+                                            onClick={this.toggleMenu}
+                                        >
+                                            Log Out
+                                        </a>
+                                    </div>
+                                )}
+                                <ProfilePic
+                                    profilepic={profilepic}
+                                    toggleUploadModal={this.toggleUploadModal}
+                                    setImage={this.setImage}
+                                    first={this.props.first}
+                                    last={this.props.last}
+                                />
+                            </div>
                         </header>
                         {this.state.showUploadModal && (
                             <ProfilePicUpload
