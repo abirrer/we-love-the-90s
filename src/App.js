@@ -21,10 +21,12 @@ export default class App extends React.Component {
             email: "",
             profilepic: "/images/defaultprofile.png",
             bio: "",
-            showUploadModal: false
+            showUploadModal: false,
+            showMenu: false
         };
 
         this.toggleUploadModal = this.toggleUploadModal.bind(this);
+        this.toggleMenu = this.toggleMenu.bind(this);
         this.setImage = this.setImage.bind(this);
         this.setBio = this.setBio.bind(this);
     }
@@ -51,6 +53,10 @@ export default class App extends React.Component {
         this.setState({ showUploadModal: !this.state.showUploadModal });
     }
 
+    toggleMenu() {
+        this.setState({ showMenu: !this.state.showMenu });
+    }
+
     setImage(url) {
         this.toggleUploadModal();
         this.setState({
@@ -71,12 +77,14 @@ export default class App extends React.Component {
                     <div>
                         <header>
                             <Link to="/" style={{ textDecoration: "none" }}>
-                                <h1>We &hearts; The Nineties</h1>
+                                <h1>We &hearts; The 90s</h1>
                             </Link>
                             <Link to="/friends">My Friends</Link>
                             <Link to="/online">Online Users</Link>
                             <Link to="/chat">Chat Room</Link>
                             <Link to="/user/1">Other Profile</Link>
+                            <a href="/logout">Log Out</a>
+                            <img src="/images/menu.png" />
                             <ProfilePic
                                 profilepic={profilepic}
                                 toggleUploadModal={this.toggleUploadModal}

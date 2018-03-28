@@ -26,9 +26,15 @@ class Chat extends React.Component {
     onKeyDown(e) {
         if (e.keyCode == 13) {
             let message = e.target.value;
+            let userData = {
+                first: this.props.first,
+                last: this.props.last,
+                email: this.props.email,
+                profilepic: this.props.profilepic
+            };
             e.target.value = "";
             console.log(message);
-            emitChatMessage(message);
+            emitChatMessage(message, userData);
             e.preventDefault();
         }
     }
@@ -40,16 +46,18 @@ class Chat extends React.Component {
 
     render() {
         const { chatMessages } = this.props;
+        console.log("here are chat messages object: ", chatMessages);
 
         const chatMessagesElem = (
             <div className="">
-                {chatMessages.map(chatMessage => (
-                    <div className="message-outer-box">
-                        <img src={this.props.profilepic} />
+                {chatMessages.map((chatMessage, i) => (
+                    <div key={i} className="message-outer-box">
+                        <img src={chatMessage.userData.profilepic} />
                         <div className="message-inner-box">
                             <p>
                                 <strong>
-                                    {this.props.first} {this.props.last}:
+                                    {chatMessage.userData.first}{" "}
+                                    {chatMessage.userData.last}:
                                 </strong>{" "}
                                 {chatMessage.messageText}
                             </p>

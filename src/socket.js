@@ -43,6 +43,9 @@ export function initSocket() {
 //     userData
 // })
 
-export function emitChatMessage(message) {
-    socket.emit("chatMessage", message);
+export function emitChatMessage(message, userData) {
+    socket.emit("chatMessage", {
+        message,
+        userData
+    });
 }

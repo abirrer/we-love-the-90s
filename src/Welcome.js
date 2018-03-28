@@ -8,7 +8,7 @@ import Login from "./Login.js";
 export default function Welcome() {
     return (
         <div id="welcome">
-            <h1>Welcome!</h1>
+            <h1>We &hearts; The 90s!</h1>
             <HashRouter>
                 <div>
                     <Route exact path="/" component={Registration} />

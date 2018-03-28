@@ -378,6 +378,11 @@ app.get("/getfriends", (req, res) => {
         });
 });
 
+app.get("/logout", function(req, res) {
+    req.session = null;
+    res.redirect("/welcome/login");
+});
+
 app.get("*", (req, res) => {
     if (!req.session.user && req.url != "/welcome") {
         res.redirect("/welcome");
@@ -433,12 +438,13 @@ io.on("connection", function(socket) {
     // Chat Message
     socket.emit("chatMessages", messages);
 
-    socket.on("chatMessage", message => {
+    socket.on("chatMessage", messageInfo => {
         let timestamp = new Date();
 
         const singleChatMessage = {
+            userData: messageInfo.userData,
             timestamp: timestamp.toString(),
-            messageText: message
+            messageText: messageInfo.message
         };
 
         messages.push(singleChatMessage);
