@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { emitChatMessage } from "./socket";
+import { Link } from "react-router-dom";
 
 function mapStateToProps(state) {
     return {
@@ -27,9 +28,9 @@ class Chat extends React.Component {
         if (e.keyCode == 13) {
             let message = e.target.value;
             let userData = {
+                id: this.props.id,
                 first: this.props.first,
                 last: this.props.last,
-                email: this.props.email,
                 profilepic: this.props.profilepic
             };
             e.target.value = "";
@@ -52,7 +53,9 @@ class Chat extends React.Component {
             <div className="">
                 {chatMessages.map((chatMessage, i) => (
                     <div key={i} className="message-outer-box">
-                        <img src={chatMessage.userData.profilepic} />
+                        <Link to={`/user/${chatMessage.userData.id}`}>
+                            <img src={chatMessage.userData.profilepic} />
+                        </Link>
                         <div className="message-inner-box">
                             <p>
                                 <strong>

@@ -16,6 +16,7 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
+            id: null,
             first: "",
             last: "",
             email: "",
@@ -33,9 +34,10 @@ export default class App extends React.Component {
 
     componentDidMount() {
         axios.get("/profile").then(res => {
-            const { first, last, email, profilepic, bio } = res.data;
+            const { id, first, last, email, profilepic, bio } = res.data;
             this.setState(
                 {
+                    id,
                     first,
                     last,
                     email,
@@ -69,7 +71,7 @@ export default class App extends React.Component {
     }
 
     render() {
-        const { first, last, email, profilepic, bio } = this.state;
+        const { id, first, last, email, profilepic, bio } = this.state;
 
         return (
             <div>
@@ -89,35 +91,35 @@ export default class App extends React.Component {
                                     <div id="menu-box">
                                         <Link to="/" onClick={this.toggleMenu}>
                                             My Profile
-                                        </Link>{" "}
+                                        </Link>
                                         <br />
                                         <Link
                                             to="/friends"
                                             onClick={this.toggleMenu}
                                         >
                                             My Friends
-                                        </Link>{" "}
+                                        </Link>
                                         <br />
                                         <Link
                                             to="/online"
                                             onClick={this.toggleMenu}
                                         >
                                             Online Users
-                                        </Link>{" "}
+                                        </Link>
                                         <br />
                                         <Link
                                             to="/chat"
                                             onClick={this.toggleMenu}
                                         >
                                             Chat Room
-                                        </Link>{" "}
+                                        </Link>
                                         <br />
                                         <Link
                                             to="/user/1"
                                             onClick={this.toggleMenu}
                                         >
                                             Other Profile
-                                        </Link>{" "}
+                                        </Link>
                                         <br />
                                         <a
                                             href="/logout"
@@ -177,7 +179,7 @@ export default class App extends React.Component {
                                     <Chat
                                         first={first}
                                         last={last}
-                                        email={email}
+                                        id={id}
                                         profilepic={profilepic}
                                     />
                                 )}

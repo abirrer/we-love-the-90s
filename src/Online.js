@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 function mapStateToProps(state) {
     return {
@@ -18,10 +19,12 @@ class Online extends React.Component {
         }
 
         const onlineUsersElem = (
-            <div className="">
+            <div className="friends__outer-box">
                 {onlineUsers.map(onlineUser => (
                     <div className="friend-box">
-                        <img src={onlineUser.profile_pic_url} />
+                        <Link to={`/user/${onlineUser.id}`}>
+                            <img src={onlineUser.profile_pic_url} />
+                        </Link>
                         <div className="friend-box__info">
                             <h3>
                                 {onlineUser.first} {onlineUser.last}
@@ -33,7 +36,7 @@ class Online extends React.Component {
         );
 
         return (
-            <div id="">
+            <div id="online-user-box">
                 <h2>Online Users</h2>
                 <div className="border" />
 

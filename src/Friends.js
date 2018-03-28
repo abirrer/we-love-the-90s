@@ -1,6 +1,7 @@
 import React from "react";
 import { receiveFriendsList, makeFriend, endFriendship } from "./Actions";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 function mapStateToProps(state) {
     return {
@@ -26,7 +27,9 @@ class Friends extends React.Component {
             <div className="friends__inner-box">
                 {friends.map(friend => (
                     <div className="friend-box">
-                        <img src={friend.profile_pic_url} />
+                        <Link to={`/user/${friend.id}`}>
+                            <img src={friend.profile_pic_url} />
+                        </Link>
                         <div className="friend-box__info">
                             <h3>
                                 {friend.first} {friend.last}
@@ -50,7 +53,9 @@ class Friends extends React.Component {
             <div className="friends__inner-box">
                 {pendingFriends.map(pendingFriend => (
                     <div className="friend-box">
-                        <img src={pendingFriend.profile_pic_url} />
+                        <Link to={`/user/${pendingFriend.id}`}>
+                            <img src={pendingFriend.profile_pic_url} />
+                        </Link>
                         <div className="pendingFriend-box__info">
                             <h3>
                                 {pendingFriend.first} {pendingFriend.last}
@@ -74,8 +79,8 @@ class Friends extends React.Component {
         return (
             <div id="friends">
                 <h2>Friends</h2>
-                <div class="border" />
-                <div id="friends__outer-box">
+                <div className="border" />
+                <div className="friends__outer-box">
                     {!friends.length && (
                         <div>You don't have any friends yet!</div>
                     )}
@@ -84,7 +89,7 @@ class Friends extends React.Component {
 
                 <h2>Pending Friend Requests</h2>
                 <div className="border" />
-                <div id="friends__outer-box">
+                <div className="friends__outer-box">
                     {!pendingFriends.length && (
                         <div>You have no friend requests!</div>
                     )}
