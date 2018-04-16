@@ -1,9 +1,40 @@
-# Using this repo in development
+# We :heart: the 90s Social Network
 
-The `src` directory is where all of your client-side Javascript code should live. The file `src/start.js` is the entry point for your React application. All other files you use will either be imported by `start.js` or imported by files that are imported `start.js` (or imported by files that are imported by files that are imported by `start.js`, etc.).
+### Overview
 
-To run your app in development, you need to start two servers.
+<p>A 12 day project to create a simple social network for people who love the 90s. It's a single-page application using React with basic functionalities like account registration and login, editable user profile, friend request buttons, and a chat room.</p>
 
-1. `bundle-server.js` - this server will listen on port 8081 and does nothing but compile the code in `src/start.js` and its dependencies into a single bundle which it serves from the url `/bundle.js`. It uses [`webpack-dev-middleware`](https://github.com/webpack/webpack-dev-middleware) to do this. This middleware keeps all the compiled files in memory and doesn't ever write a file to disk. Every time you edit one of the files in your bundle, it detects the change and automatically recompiles. Thus, you do not have to restart this process every time you make a change to one of your client-side Javascript files. After a change is saved, the updated `/bundle.js` will be available automatically.
+### Website
 
-2. `index.js` - this server listens on port 8080 and it is where all your normal express stuff should go. When `index.js` is running in development, requests for `/bundle.js` will cause a request to be made to `http://localhost:8081/bundle.js` and the result served (it uses the [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware) to do this). You can restart this server every time you make a server-side change and not have to wait for `bundle.js` to recompile before you can test the change.
+<p>https://welovethe90ssocialnetwork.herokuapp.com</p>
+
+### Technologies Used
+
+<p>HTML, CSS, Javascript, React, Redux, socket.io, node.js and express.js, postgreSQL, Amazon S3 image storage bucket</p>
+
+### Key Features
+
+<p>New users are directed to a welcome register page.</p>
+<p align="center">
+<img src=""  width="800"/>
+</p>
+
+<p>When new users sign up, they are directed to their default profile page, which has a default profile picture and an empty bio. Users can change their profile picture by clicking on the main picture or the icon picture in the top corner.  Users can change their bio by clicking the "Edit Bio" button.  All changes are immediately saved and stored.</p>
+<p align="center">
+<img src=""  width="800"/>
+</p>
+
+<p>Here is a side by side view of the new user just created (on the left) and an already registered user re-signing in (on the right).  On the homepage, users can click on the hamburger menu and go to the "Online Users" link which shows a list of online users (using socket.io).  By clicking on a users profile, you are redirected to their profile page where there is a "Send Friend Request" button.  The request is then shown in the "My Friends" page as a Pending Request.</p>
+<p align="center">
+<img src=""  width="800"/>
+</p>
+
+<p>Here is a single screen of the "My Friends" page where a user can view all their current friends or delete friends, and add pending requests. As you can see, when a button is pressed the friend list is updated immediately.</p>
+<p align="center">
+<img src=""  width="800"/>
+</p>
+
+<p>Lastly, there is a group chat room, where every current user online can view and send chats to each other.  If the comment box fills up, then the box automatically scrolls down to the most recent comment.  You can see the chat room updated immediately in both screens.</p>
+<p align="center">
+<img src=""  width="800"/>
+</p>
